@@ -1,0 +1,35 @@
+---
+#==============================================================#
+# debug   info                                                 #
+#==============================================================#
+
+
+- name: vastbase G100 debug info
+  tags: debug info 
+  become: yes
+  block:
+    - name: Make sure main and db check  exists
+      file: path={{ item }} state=directory owner={{ vb_db_su }}   group=vastbase mode=0777
+      with_items: 
+        - "{{ vb_an_conf }}"
+        - "{{ vb_dcs_conf }}"
+    
+    # vb_an_confs: 
+    - name: create vastbase G100 directory structure
+      file: path={{ item }}  state=directory owner={{ vb_db_su }} group=vastbase mode=0700
+      with_items:
+        - "{{ vb_an_conf }}/db_inspection"
+        - "{{ vb_an_conf }}/db_check"
+        - "{{ vb_an_conf }}/backup"
+        - "{{ vb_an_conf }}/db_monitor"
+
+    - name: Copy debug info script 
+      copy: src=collect_debug_info_vastbase_g100.sh  dest="{{ vb_an_conf }}/db_check" owner={{ vb_db_su }} group=vastbase mode=0744
+    
+    - name:  debug info  sh
+      #chdir: "{{ vb_an_conf }}/db_inspection"
+      shell :  "cd {{ vb_an_conf }}/db_check/ &&{{ vb_an_conf }}/db_check/collect_debug_info_vastbase_g100.sh   {{ vb_data }} {{ mange_ip }} {{ mange_check }}  "
+      register: result
+
+    - name: Show debug info
+      debug: var=result.stdout verbosity=0

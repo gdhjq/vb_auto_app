@@ -1,0 +1,12 @@
+ current_database | schemaname | tablename | rulename | definition 
+------------------+------------+-----------+----------+------------
+(0 rows)
+
+ current_database | schemaname | tablename | rulename | definition 
+------------------+------------+-----------+----------+------------
+(0 rows)
+
+ current_database | schemaname | tablename | rulename | definition 
+------------------+------------+-----------+----------+------------
+(0 rows)
+

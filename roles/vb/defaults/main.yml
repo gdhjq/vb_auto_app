@@ -1,0 +1,70 @@
+---
+# defaults file for vb
+#------------------------------------------------------------------------------
+# Vastbase G100  environment
+#------------------------------------------------------------------------------
+# - dbsu - #
+vb_db_su: vastbase
+vb_db_uid: 2600
+vb_db_sudo: nopass
+os_home: /home/vastbase
+vb_db_home: /home/vastbase/local
+vb_db_home_soft: /home/vastbase/soft
+vb_dbsu_ssh_exchange: true                    # exchange vastbase dbsu ssh key among same cluster ?
+
+
+# -dbip  #
+mange_ip: '82.157.166.95'
+mange_inspection: /root/auto_app/roles/vb/files/db_inspection
+mange_check: /root/auto_app/roles/vb/files/db_check
+
+# - vb packages - #
+pg_version: v5
+vb_packages: 
+  - zlib libuuid readline python
+  - krb5-libs libicu cracklib 
+  - libxslt tcl perl openldap
+  - pam systemd-libs bzip2 
+  - gettext openssl libxml2 
+
+x86_packages: Vastbase-G100-installer-2.2_Build_5.8-CentOS-x86_64-20211014.tar
+db_extensions:
+  - pg_stat_statements
+
+
+# - storage - #
+vb_data: /home/vastbase/data
+vb_fs_backup: /home/vastbase/backups
+vb_an_conf: /usr/local/vastbase                # vastbase ansible main and backup dir
+vb_dcs_conf: /usr/local/vastbase/dcs 
+
+# - connection - #
+vb_listen: '0.0.0.0'                          # VastbaseG100 listen address, '0.0.0.0' (all ipv4 addr) by default
+vb_port: 5432                                 # VastbaseG100  port, 5432 by default
+vb_localhost: /tmp             # localhost unix socket dir for connection
+
+# - patroni - #
+# patroni_mode, available options: default|pause|remove
+#   - default: default ha mode
+#   - pause:   into maintenance mode
+#   - remove:  remove patroni after bootstrap
+patroni_mode: default                         # pause|default|remove
+vb_namespace: /vastbase                            # top level key namespace in dcs
+patroni_port: 8008                            # default patroni port
+patroni_watchdog_mode: automatic              # watchdog mode: off|automatic|required
+#vb_conf: vb.yml                             # pgsql template:  {oltp|olap|crit|tiny}.yml , use tiny for sandbox
+# use oltp|olap|crit for production, or fork your own templates (in ansible templates dir)
+vb_shared_libraries: 'pg_stat_statements' # extension shared libraries to be added
+
+
+# - localization - #
+vb_encoding: UTF8    
+vb_lc_ctype: en_US.UTF8                       # database character type, en_US.UTF8 by default (for i18n full-text search)
+
+
+#   log #
+start_log:  /home/vastbase/log.log
+
+
+
+

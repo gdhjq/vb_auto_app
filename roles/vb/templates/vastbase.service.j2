@@ -1,0 +1,31 @@
+[Unit]
+Description=vastbase server
+After=network.target
+
+[Service]
+Environment="LD_LIBRARY_PATH={{ vb_db_home }}/lib"
+Environment="VASTBASE_HOME={{ vb_db_home }}"
+Type=forking
+Restart=always
+RestartSec=3
+User={{ vb_db_su }}
+
+#方便脚本获取数据库目录的路径
+#pg_data_dir:/home/vastbase/data
+
+# Where to send early-startup messages from the server (before the logging
+# options of postgresql.conf take effect)
+# This is normally controlled by the global default set by systemd
+# StandardOutput=syslog
+
+# Disable OOM kill on the postmaster
+OOMScoreAdjust=-1000
+
+ExecStart={{ vb_db_home }}/bin/vb_ctl -D {{ vb_data }} -l {{ vb_data }}/pg_log/log.log start
+ExecStop={{ vb_db_home }}/bin/vb_ctl -D {{ vb_data }} -l {{ vb_data }}/pg_log/log.log stop
+
+# Give a reasonable amount of time for the server to start up/shut down
+TimeoutSec=300
+
+[Install]
+WantedBy=multi-user.target

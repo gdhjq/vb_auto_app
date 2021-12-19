@@ -1,0 +1,4 @@
+ pg_xlog_location_diff | slot_name | plugin | slot_type | datoid | database | active | xmin | catalog_xmin | restart_lsn | dummy_standby 
+-----------------------+-----------+--------+-----------+--------+----------+--------+------+--------------+-------------+---------------
+(0 rows)
+

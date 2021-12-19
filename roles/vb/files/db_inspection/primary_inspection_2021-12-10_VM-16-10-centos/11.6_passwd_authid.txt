@@ -1,0 +1,10 @@
+       rolname        | rolvaliduntil 
+----------------------+---------------
+ vbadmin              | 
+ vbaudit              | 
+ vbsso                | 
+ vb_read_all_settings | 
+ vastbase             | 
+ grp_nd               | 
+(6 rows)
+

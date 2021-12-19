@@ -1,0 +1,24 @@
+ current_database | umid | srvid | srvname | umuser | usename | umoptions 
+------------------+------+-------+---------+--------+---------+-----------
+(0 rows)
+
+ current_database | schemaname | viewname | viewowner | definition 
+------------------+------------+----------+-----------+------------
+(0 rows)
+
+ current_database | umid | srvid | srvname | umuser | usename | umoptions 
+------------------+------+-------+---------+--------+---------+-----------
+(0 rows)
+
+ current_database | schemaname | viewname | viewowner | definition 
+------------------+------------+----------+-----------+------------
+(0 rows)
+
+ current_database | umid | srvid | srvname | umuser | usename | umoptions 
+------------------+------+-------+---------+--------+---------+-----------
+(0 rows)
+
+ current_database | schemaname | viewname | viewowner | definition 
+------------------+------------+----------+-----------+------------
+(0 rows)
+

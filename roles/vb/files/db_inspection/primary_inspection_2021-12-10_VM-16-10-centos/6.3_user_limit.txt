@@ -1,0 +1,6 @@
+ rolname  | rolconnlimit | connects 
+----------+--------------+----------
+ vastbase |           -1 |        5
+ vbadmin  |           -1 |        1
+(2 rows)
+

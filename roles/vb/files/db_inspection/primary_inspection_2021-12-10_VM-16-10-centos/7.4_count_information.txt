@@ -1,0 +1,9 @@
+  datname  | rollback_ratio | hit_ratio | blk_read_time | blk_write_time | conflicts | deadlocks 
+-----------+----------------+-----------+---------------+----------------+-----------+-----------
+ template1 | 0 %            | 0 %       |             0 |              0 |         0 |         0
+ cicgroup  | 0 %            | 100 %     |             0 |              0 |         0 |         0
+ template0 | 0 %            | 0 %       |             0 |              0 |         0 |         0
+ vastbase  | 1.1 %          | 100 %     |             0 |              0 |         0 |         0
+ postgres  | 0 %            | 100 %     |             0 |              0 |         0 |         0
+(5 rows)
+

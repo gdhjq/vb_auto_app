@@ -1,0 +1,1 @@
+40ccf387d6e3b505d26c04b12882a00a  /home/vastbase/data/postgresql.conf

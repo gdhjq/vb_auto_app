@@ -1,0 +1,130 @@
+---
+#==============================================================#
+# Create dbsu                                                  #
+#==============================================================#
+- name: Create vastbase dbsu
+  become: yes
+  tags: vb_dbsu
+  block:
+    # - dbsu users and groups - #
+    - name: Create os group vastbase
+      group: name=vastbase gid={{ vb_db_uid }}
+
+
+    - name: Create dbsu {{ vb_db_su }}
+      user: name={{ vb_db_su }} uid={{ vb_db_uid }} home={{ os_home }} group=vastbase  generate_ssh_key=yes
+
+    # - dbsu privilege - #
+    - name: Grant dbsu nopass sudo
+      when: vb_db_sudo == 'nopass'
+      copy:
+        content: "vastbase  ALL=(ALL) NOPASSWD: ALL"
+        dest: /etc/sudoers.d/vastbase
+        mode: 0440
+
+    - name: Grant dbsu all sudo
+      when: vb_db_sudo == 'all'
+      copy:
+        content: "vastbase ALL=(ALL) ALL"
+        dest: /etc/sudoers.d/vastbase
+        mode: 0440
+
+    - name: Grant dbsu limited sudo
+      when: vb_db_sudo == 'limit'
+      copy:
+        src: vastbase.sudoer
+        dest: /etc/sudoers.d/vastbase
+        mode: 0440
+
+    # - watchdog owner - #
+   # - name: Config watchdog onwer to dbsu
+    #  ignore_errors: true
+     # file: path=/dev/watchdog owner={{ vb_db_su }} group=vastbase
+
+    # - dbsu ssh - #
+    - name: Add dbsu ssh no host checking
+      lineinfile:
+        path: "{{ os_home }}/.ssh/config"   
+        regexp: '^StrictHostKeyChecking='
+        line: StrictHostKeyChecking=no
+        create: yes
+
+    # vastbase ssh-key exchange
+    - name: Fetch dbsu public keys
+      shell: cat {{ os_home }}/.ssh/id_rsa.pub
+      register: dbsu_ssh_keys
+
+#==============================================================#
+# 操作系统配置设置                                              #
+#==============================================================#
+- name: copy  conf
+  become: yes
+  tags: copy_conf
+  block:
+    - name: Copy logind_conf
+      template:
+        src: logind.conf.j2
+        dest: /etc/systemd/logind.conf
+        
+   # - name: Copy systemd-logind.service 
+    #  template:
+    #    src: systemd-logind.service.j2
+      #  dest: /usr/lib/systemd/system/systemd-logind.service
+    
+    - name: systemctl daemon-reload
+      command: systemctl daemon-reload
+
+    #- name: Restart logind to load new node-meta
+     # systemd: name=systemd-logind state=restarted
+      
+#==============================================================#
+# Install packages                                             #
+#==============================================================#
+- name: Install vastbase G100
+  become: yes
+  tags: vb_install
+  block:
+    - name: Install offical pgdg yum repo
+      yum: name={{ item |regex_replace(' ',',') }}  disable_gpg_check=true
+      with_items: "{{ vb_packages }}"
+
+#==============================================================#
+# vastbase packages                                            #
+#==============================================================#
+- name: Scp vastbase G100 tar
+  become: yes
+  tags: vb_tar
+  block:
+    - name:  check os kernel x86_64
+      when: machine_name == 'x86_64'
+      copy: src=V_2_2_5/X86/ dest="{{ vb_db_home_soft }}" owner={{ vb_db_su }}  group=vastbase  mode=0744
+
+    - name: Copy install.sh
+      copy: src=install.sh  dest="{{ os_home }}/"   owner={{ vb_db_su }}  group=vastbase  mode=0744
+
+    - name: execute script install
+      become_user: "{{ vb_db_su }}"
+      script:  install.sh  {{ os_home }}  {{ vb_db_home }}  {{ vb_data }} {{ vb_port }} {{ vb_db_su }}
+      register: result
+
+    - name: copy license
+      copy: src=ZHRSLlicense dest="{{ os_home }}/" owner={{ vb_db_su }}  group=vastbase  mode=0644
+
+    - name:  copy vastbase postgres.conf
+      template:
+        src: postgres.conf.j2
+        dest: "{{ vb_data }}/postgresql.conf"
+    
+#==============================================================#
+# vastbase start                                               #
+#==============================================================#
+- name:   vastbase G100 start
+  become: yes
+  tags: vb_start
+  block:
+    - name:  Copy db_start.sh
+      copy: src=db_start.sh  dest="{{ os_home }}/"   owner={{ vb_db_su }}  group=vastbase  mode=0744
+    
+    - name:   db start
+      script:  db_start.sh  {{ vb_db_su }}  {{ vb_data }} {{  start_log }}
+      register: result

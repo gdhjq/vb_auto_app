@@ -1,0 +1,16 @@
+ current_database | schemaname | relname | indexrelname | idx_scan | idx_tup_read | idx_tup_fetch | pg_size_pretty 
+------------------+------------+---------+--------------+----------+--------------+---------------+----------------
+(0 rows)
+
+ current_database | schemaname | relname | indexrelname | idx_scan | idx_tup_read | idx_tup_fetch | pg_size_pretty 
+------------------+------------+---------+--------------+----------+--------------+---------------+----------------
+(0 rows)
+
+ current_database | schemaname |             relname             |           indexrelname           | idx_scan | idx_tup_read | idx_tup_fetch | pg_size_pretty 
+------------------+------------+---------------------------------+----------------------------------+----------+--------------+---------------+----------------
+ postgres         | snapshot   | snap_class_vital_info           | snap_class_info_name             |        0 |            0 |             0 | 9080 kB
+ postgres         | snapshot   | snap_summary_statio_all_indexes | snap_summary_statio_indexes_name |        0 |            0 |             0 | 6144 kB
+ postgres         | snapshot   | snap_summary_stat_all_indexes   | snap_summary_stat_indexes_name   |        0 |            0 |             0 | 6120 kB
+ postgres         | snapshot   | snap_summary_statio_all_tables  | snap_summary_statio_tables_name  |        0 |            0 |             0 | 3736 kB
+(4 rows)
+

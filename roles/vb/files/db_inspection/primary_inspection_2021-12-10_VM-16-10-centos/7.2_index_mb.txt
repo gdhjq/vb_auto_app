@@ -1,0 +1,12 @@
+ current_database | nspname | relname | pg_size_pretty | idx_cnt 
+------------------+---------+---------+----------------+---------
+(0 rows)
+
+ current_database | nspname | relname | pg_size_pretty | idx_cnt 
+------------------+---------+---------+----------------+---------
+(0 rows)
+
+ current_database | nspname | relname | pg_size_pretty | idx_cnt 
+------------------+---------+---------+----------------+---------
+(0 rows)
+

@@ -1,0 +1,12 @@
+ current_database | schemaname | relname | n_dead_tup 
+------------------+------------+---------+------------
+(0 rows)
+
+ current_database | schemaname | relname | n_dead_tup 
+------------------+------------+---------+------------
+(0 rows)
+
+ current_database | schemaname | relname | n_dead_tup 
+------------------+------------+---------+------------
+(0 rows)
+

@@ -1,0 +1,52 @@
+ datname 
+---------
+(0 rows)
+
+ current_database | relname | relkind 
+------------------+---------+---------
+(0 rows)
+
+ current_database | typname 
+------------------+---------
+(0 rows)
+
+ current_database | proname 
+------------------+---------
+(0 rows)
+
+ current_database | nspname | relname | attname 
+------------------+---------+---------+---------
+(0 rows)
+
+ current_database | relname | relkind 
+------------------+---------+---------
+(0 rows)
+
+ current_database | typname 
+------------------+---------
+(0 rows)
+
+ current_database | proname 
+------------------+---------
+(0 rows)
+
+ current_database | nspname | relname | attname 
+------------------+---------+---------+---------
+(0 rows)
+
+ current_database | relname | relkind 
+------------------+---------+---------
+(0 rows)
+
+ current_database | typname 
+------------------+---------
+(0 rows)
+
+ current_database | proname 
+------------------+---------
+(0 rows)
+
+ current_database | nspname | relname | attname 
+------------------+---------+---------+---------
+(0 rows)
+

@@ -1,0 +1,24 @@
+ current_database | relname | tgname | proname | tgenabled 
+------------------+---------+--------+---------+-----------
+(0 rows)
+
+ current_database | owner | trigger_name | trigger_type | triggering_event | trigger_body | before_statement | after_statement 
+------------------+-------+--------------+--------------+------------------+--------------+------------------+-----------------
+(0 rows)
+
+ current_database | relname | tgname | proname | tgenabled 
+------------------+---------+--------+---------+-----------
+(0 rows)
+
+ current_database | owner | trigger_name | trigger_type | triggering_event | trigger_body | before_statement | after_statement 
+------------------+-------+--------------+--------------+------------------+--------------+------------------+-----------------
+(0 rows)
+
+ current_database | relname | tgname | proname | tgenabled 
+------------------+---------+--------+---------+-----------
+(0 rows)
+
+ current_database | owner | trigger_name | trigger_type | triggering_event | trigger_body | before_statement | after_statement 
+------------------+-------+--------------+--------------+------------------+--------------+------------------+-----------------
+(0 rows)
+

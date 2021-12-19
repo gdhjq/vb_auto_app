@@ -1,0 +1,42 @@
+ current_database |  nspname   |    relname     | relkind | pg_size_pretty | seq_scan | seq_tup_read | idx_scan | idx_tup_fetch | n_tup_ins | n_tup_upd | n_tup_del | n_tup_hot_upd | n_live_tup | n_dead_tup 
+------------------+------------+----------------+---------+----------------+----------+--------------+----------+---------------+-----------+-----------+-----------+---------------+------------+------------
+ cicgroup         | pg_catalog | pg_attribute   | r       | 2064 kB        |        1 |        10865 |     1102 |          4649 |         0 |         0 |         0 |             0 |          0 |          0
+ cicgroup         | pg_catalog | pg_proc        | r       | 944 kB         |        0 |            0 |       20 |            69 |         0 |         0 |         0 |             0 |          0 |          0
+ cicgroup         | pg_catalog | pg_depend      | r       | 584 kB         |        0 |            0 |        0 |             0 |         0 |         0 |         0 |             0 |          0 |          0
+ cicgroup         | pg_catalog | pg_class       | r       | 416 kB         |       24 |        17351 |      835 |           588 |         0 |         0 |         0 |             0 |          0 |          0
+ cicgroup         | pg_catalog | pg_rewrite     | r       | 392 kB         |        0 |            0 |      245 |           255 |         0 |         0 |         0 |             0 |          0 |          0
+ cicgroup         | pg_catalog | pg_collation   | r       | 232 kB         |        0 |            0 |        0 |             0 |         0 |         0 |         0 |             0 |          0 |          0
+ cicgroup         | pg_catalog | pg_statistic   | r       | 184 kB         |        0 |            0 |       30 |            23 |         0 |         0 |         0 |             0 |          0 |          0
+ cicgroup         | pg_catalog | pg_type        | r       | 184 kB         |        1 |          872 |       69 |            67 |         0 |         0 |         0 |             0 |          0 |          0
+ cicgroup         | pg_catalog | pg_description | r       | 144 kB         |        0 |            0 |        0 |             0 |         0 |         0 |         0 |             0 |          0 |          0
+ cicgroup         | pg_catalog | pg_operator    | r       | 120 kB         |        0 |            0 |       63 |            82 |         0 |         0 |         0 |             0 |          0 |          0
+(10 rows)
+
+ current_database |  nspname   |    relname     | relkind | pg_size_pretty | seq_scan | seq_tup_read | idx_scan | idx_tup_fetch | n_tup_ins | n_tup_upd | n_tup_del | n_tup_hot_upd | n_live_tup | n_dead_tup 
+------------------+------------+----------------+---------+----------------+----------+--------------+----------+---------------+-----------+-----------+-----------+---------------+------------+------------
+ vastbase         | public     | error_log      | r       | 12 MB          |        0 |            0 |          |               |         0 |         0 |         0 |             0 |          0 |          0
+ vastbase         | pg_catalog | pg_attribute   | r       | 2120 kB        |        1 |        10964 |     1169 |          4920 |         0 |         0 |         0 |             0 |          0 |          0
+ vastbase         | pg_catalog | pg_proc        | r       | 952 kB         |        0 |            0 |       34 |            83 |         0 |         0 |         0 |             0 |          0 |          0
+ vastbase         | pg_catalog | pg_depend      | r       | 584 kB         |        0 |            0 |        0 |             0 |         0 |         0 |         0 |             0 |          0 |          0
+ vastbase         | pg_catalog | pg_class       | r       | 416 kB         |       24 |        17518 |      930 |           681 |         0 |         0 |         0 |             0 |          0 |          0
+ vastbase         | pg_catalog | pg_rewrite     | r       | 392 kB         |        0 |            0 |      255 |           283 |         0 |         0 |         0 |             0 |          0 |          0
+ vastbase         | pg_catalog | pg_statistic   | r       | 256 kB         |        0 |            0 |       37 |            27 |         0 |         0 |         0 |             0 |          0 |          0
+ vastbase         | pg_catalog | pg_collation   | r       | 232 kB         |        0 |            0 |        0 |             0 |         0 |         0 |         0 |             0 |          0 |          0
+ vastbase         | pg_catalog | pg_type        | r       | 184 kB         |        1 |          883 |      123 |           119 |         0 |         0 |         0 |             0 |          0 |          0
+ vastbase         | pg_catalog | pg_description | r       | 144 kB         |        0 |            0 |        0 |             0 |         0 |         0 |         0 |             0 |          0 |          0
+(10 rows)
+
+ current_database |  nspname   |             relname             | relkind | pg_size_pretty | seq_scan | seq_tup_read | idx_scan | idx_tup_fetch | n_tup_ins | n_tup_upd | n_tup_del | n_tup_hot_upd | n_live_tup | n_dead_tup 
+------------------+------------+---------------------------------+---------+----------------+----------+--------------+----------+---------------+-----------+-----------+-----------+---------------+------------+------------
+ postgres         | snapshot   | snap_global_stat_all_indexes    | r       | 21 MB          |        0 |            0 |          |               |         0 |         0 |         0 |             0 |          0 |          0
+ postgres         | snapshot   | snap_class_vital_info           | r       | 20 MB          |        0 |            0 |        0 |             0 |         0 |         0 |         0 |             0 |          0 |          0
+ postgres         | snapshot   | snap_global_statio_all_indexes  | r       | 19 MB          |        0 |            0 |          |               |         0 |         0 |         0 |             0 |          0 |          0
+ postgres         | snapshot   | snap_global_stat_all_tables     | r       | 17 MB          |        0 |            0 |          |               |         0 |         0 |         0 |             0 |          0 |          0
+ postgres         | snapshot   | snap_summary_stat_all_indexes   | r       | 15 MB          |        0 |            0 |        0 |             0 |         0 |         0 |         0 |             0 |          0 |          0
+ postgres         | snapshot   | snap_summary_statio_all_indexes | r       | 15 MB          |        0 |            0 |        0 |             0 |         0 |         0 |         0 |             0 |          0 |          0
+ postgres         | snapshot   | snap_global_statio_all_tables   | r       | 13 MB          |        0 |            0 |          |               |         0 |         0 |         0 |             0 |          0 |          0
+ postgres         | pg_catalog | gs_asp                          | r       | 12 MB          |        0 |            0 |        0 |             0 |         0 |         0 |         0 |             0 |          0 |          0
+ postgres         | snapshot   | snap_global_config_settings     | r       | 11 MB          |        0 |            0 |          |               |         0 |         0 |         0 |             0 |          0 |          0
+ postgres         | snapshot   | snap_summary_stat_all_tables    | r       | 11 MB          |        0 |            0 |          |               |         0 |         0 |         0 |             0 |          0 |          0
+(10 rows)
+

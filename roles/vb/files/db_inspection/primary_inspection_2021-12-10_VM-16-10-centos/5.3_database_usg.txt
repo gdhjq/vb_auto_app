@@ -1,0 +1,9 @@
+  datname  | pg_size_pretty 
+-----------+----------------
+ postgres  | 217 MB
+ vastbase  | 26 MB
+ cicgroup  | 14 MB
+ template1 | 13 MB
+ template0 | 13 MB
+(5 rows)
+

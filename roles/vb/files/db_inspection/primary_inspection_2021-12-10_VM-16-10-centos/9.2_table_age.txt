@@ -1,0 +1,27 @@
+      table_name       |  age  
+-----------------------+-------
+ pg_statistic          | 14151
+ pg_ts_dict            | 14151
+ pg_type               | 14151
+ gs_client_global_keys | 14151
+ pg_authid             | 14151
+(5 rows)
+
+      table_name       |  age  
+-----------------------+-------
+ pg_type               | 15506
+ pg_ts_dict            | 15506
+ gs_client_global_keys | 15506
+ pg_authid             | 15506
+ pg_statistic          | 15506
+(5 rows)
+
+      table_name       |  age  
+-----------------------+-------
+ gs_client_global_keys | 13563
+ pg_ts_dict            | 13563
+ pg_type               | 13563
+ pg_authid             | 13563
+ pg_statistic          | 13563
+(5 rows)
+

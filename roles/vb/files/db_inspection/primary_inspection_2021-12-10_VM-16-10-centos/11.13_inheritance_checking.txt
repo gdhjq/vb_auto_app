@@ -1,0 +1,12 @@
+ inhrelid | inhparent | inhseqno 
+----------+-----------+----------
+(0 rows)
+
+ inhrelid | inhparent | inhseqno 
+----------+-----------+----------
+(0 rows)
+
+ inhrelid | inhparent | inhseqno 
+----------+-----------+----------
+(0 rows)
+

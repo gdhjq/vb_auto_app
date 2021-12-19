@@ -1,0 +1,4 @@
+ setdatabase | setrole | setconfig 
+-------------+---------+-----------
+(0 rows)
+

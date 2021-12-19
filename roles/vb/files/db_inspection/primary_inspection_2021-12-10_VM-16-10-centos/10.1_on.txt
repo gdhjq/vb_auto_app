@@ -1,0 +1,7 @@
+      name       |  setting   
+-----------------+------------
+ archive_command | (disabled)
+ archive_mode    | off
+ autovacuum      | on
+(3 rows)
+

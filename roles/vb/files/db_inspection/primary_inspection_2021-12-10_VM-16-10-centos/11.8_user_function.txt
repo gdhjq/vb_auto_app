@@ -1,0 +1,14 @@
+ current_database | rolname | nspname |    proname     
+------------------+---------+---------+----------------
+ cicgroup         | grp_nd  | grp_nd  | createseqmaxno
+ cicgroup         | grp_nd  | grp_nd  | createmaxno
+(2 rows)
+
+ current_database | rolname | nspname | proname 
+------------------+---------+---------+---------
+(0 rows)
+
+ current_database | rolname | nspname | proname 
+------------------+---------+---------+---------
+(0 rows)
+
