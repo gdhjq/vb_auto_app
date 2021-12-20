@@ -82,7 +82,7 @@ if __name__ == "__main__":
     if primary_role:
         check_hostname = 'primary_' + check_hostname
     if  secondary_role:
-        check_hostname = 'primary_' + check_hostname
+        check_hostname = 'secondary_' + check_hostname
     ## save docx
 
     doc = DocxTemplate('Template1.docx')
