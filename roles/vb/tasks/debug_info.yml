@@ -24,7 +24,7 @@
         - "{{ vb_an_conf }}/db_monitor"
 
     - name: Copy debug info script 
-      copy: src=collect_debug_info_vastbase_g100.sh  dest="{{ vb_an_conf }}/db_check" owner={{ vb_db_su }} group=vastbase mode=0744
+      copy: src=db_check/shell/collect_debug_info_vastbase_g100.sh  dest="{{ vb_an_conf }}/db_check" owner={{ vb_db_su }} group=vastbase mode=0744
     
     - name:  debug info  sh
       #chdir: "{{ vb_an_conf }}/db_inspection"
