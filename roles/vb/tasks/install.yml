@@ -100,7 +100,7 @@
       copy: src=V_2_2_5/X86/ dest="{{ vb_db_home_soft }}" owner={{ vb_db_su }}  group=vastbase  mode=0744
 
     - name: Copy install.sh
-      copy: src=install.sh  dest="{{ os_home }}/"   owner={{ vb_db_su }}  group=vastbase  mode=0744
+      copy: src=db_install/install.sh  dest="{{ os_home }}/"   owner={{ vb_db_su }}  group=vastbase  mode=0744
 
     - name: execute script install
       become_user: "{{ vb_db_su }}"
@@ -108,7 +108,7 @@
       register: result
 
     - name: copy license
-      copy: src=ZHRSLlicense dest="{{ os_home }}/" owner={{ vb_db_su }}  group=vastbase  mode=0644
+      copy: src=db_install/ZHRSLlicense dest="{{ os_home }}/" owner={{ vb_db_su }}  group=vastbase  mode=0644
 
     - name:  copy vastbase postgres.conf
       template:
@@ -123,7 +123,7 @@
   tags: vb_start
   block:
     - name:  Copy db_start.sh
-      copy: src=db_start.sh  dest="{{ os_home }}/"   owner={{ vb_db_su }}  group=vastbase  mode=0744
+      copy: src=db_install/db_start.sh  dest="{{ os_home }}/"   owner={{ vb_db_su }}  group=vastbase  mode=0744
     
     - name:   db start
       script:  db_start.sh  {{ vb_db_su }}  {{ vb_data }} {{  start_log }}
