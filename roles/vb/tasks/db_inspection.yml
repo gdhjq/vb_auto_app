@@ -24,12 +24,12 @@
         - "{{ vb_an_conf }}/db_monitor"
       
     - name: Copy generate report 
-      copy: src=generate_report_g100.sh  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group=vastbase mode=0744
+      copy: src=db_inspection/shell/generate_report_g100.sh  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group=vastbase mode=0744
     
     - name: Copy py 
-      copy: src=generate_report_template_v1.0.1.py  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group=vastbase mode=0744
+      copy: src=db_inspection/shell/generate_report_template_v1.0.1.py  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group=vastbase mode=0744
     - name:  Copy template
-      copy: src=Template1.docx  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group=vastbase mode=0744
+      copy: src=db_inspection/shell/Template1.docx  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group=vastbase mode=0744
     
     - name:  execute sh
       #chdir: "{{ vb_an_conf }}/db_inspection" 执行巡检脚本
