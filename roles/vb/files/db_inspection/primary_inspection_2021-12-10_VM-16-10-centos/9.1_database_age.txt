@@ -1,9 +1,0 @@
-  datname  |  age  
------------+-------
- vastbase  | 15506
- cicgroup  | 14151
- template0 | 14151
- template1 | 13857
- postgres  | 13563
-(5 rows)
-

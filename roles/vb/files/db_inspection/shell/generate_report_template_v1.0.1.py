@@ -40,7 +40,6 @@ def check_item_detail():
          #   continue
         idx_result = get_content_from_file(str(idx_detail))
         data_docx[idx_keys] = idx_result
-        #print(data_docx)
 
 ### read content from check result file ###
 def read_content_from_file(fname):
@@ -75,17 +74,21 @@ if __name__ == "__main__":
 
     ### generate doc file content ####
     init_check_result_file_dict(cur_dir)
-    print(check_result_file_dict)
+    #print(check_result_file_dict)
     check_item_detail()
-    primary_role =file_exists(primary_flag_file,cur_dir)
-    secondary_role =file_exists(secondary_flag_file,cur_dir)
+    
+    primary_role = os.path.exists(os.path.join(cur_dir,primary_flag_file))
+    check_hostname = 'primary_' + check_hostname if primary_role else  'secondary_' + check_hostname
+    
+    #primary_role =file_exists(primary_flag_file,cur_dir)
+    #secondary_role =file_exists(secondary_flag_file,cur_dir)
 
-    if primary_role:
-        check_hostname = 'primary_' + check_hostname
-    if  secondary_role:
-        check_hostname = 'secondary_' + check_hostname
+    #if primary_role:
+     #   check_hostname = 'primary_' + check_hostname
+    #if  secondary_role:
+     #   check_hostname = 'secondary_' + check_hostname
+    
     ## save docx
-
     doc = DocxTemplate('Template1.docx')
     doc.render(data_docx)
     doc_file_name = check_hostname + '.docx'

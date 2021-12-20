@@ -1,6 +1,0 @@
-  spcname   | pg_tablespace_location | pg_size_pretty 
-------------+------------------------+----------------
- pg_global  |                        | 514 MB
- pg_default |                        | 284 MB
-(2 rows)
-

@@ -1,6 +1,0 @@
- datname  | datconnlimit | connects 
-----------+--------------+----------
- postgres |           -1 |        5
- vastbase |           -1 |        1
-(2 rows)
-
