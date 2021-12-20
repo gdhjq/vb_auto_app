@@ -15,8 +15,8 @@ vb_dbsu_ssh_exchange: true                    # exchange vastbase dbsu ssh key a
 
 # -dbip  #
 mange_ip: '82.157.166.95'
-mange_inspection: /root/auto_app/roles/vb/files/db_inspection
-mange_check: /root/auto_app/roles/vb/files/db_check
+mange_inspection: /root/vb_auto_app/roles/vb/files/db_inspection
+mange_check: /root/vb_auto_app/roles/vb/files/db_check
 
 # - vb packages - #
 pg_version: v5
