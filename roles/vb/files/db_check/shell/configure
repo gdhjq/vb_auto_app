@@ -108,7 +108,7 @@ function check_release(){
         local full=`cat /etc/centos-release | tr -dc '0-9.'`
         local major=$(cat /etc/centos-release | tr -dc '0-9.'|cut -d \. -f1)
         local minor=$(cat /etc/centos-release | tr -dc '0-9.' |cut -d \.  -f 1,2)
-        echo "os_version=$(cat /etc/centos-release | tr -dc '0-9.' |cut -d \.  -f 1,2)" >> ${PWD}/roles/vb/vars/main.yml
+        echo "os_version=$(cat /etc/centos-release | tr -dc '0-9.' |cut -d \.  -f 1,2)" ${PWD}/roles/vb/vars/main.yml
         if [[ ${major} != "7" ]]; then
             log_error "release = ${full} , only 7 is supported"
             exit 4

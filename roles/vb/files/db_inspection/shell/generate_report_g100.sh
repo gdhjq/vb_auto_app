@@ -32,8 +32,12 @@ export GAUSSHOME=${vb_home}
 export PATH=$GAUSSHOME/bin:$PATH:
 export DATE=`date +"%Y%m%d%H%M"`
 export LD_LIBRARY_PATH=$GAUSSHOME/lib:/lib64:/usr/lib64:/usr/local/lib64:/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH
-pg_log_dir=$PGDATA/pg_log
-
+log_dir=$(cat $PGDATA/postgresql.conf | grep -E '^log_directory' | sed 's/.*=\s*//g' | sed "s/'//g" | awk 'END{print $1}')
+if [[ ${log_dir} == '' ]]
+then
+  pg_log_dir=$PGDATA/pg_log
+else
+  pg_log_dir=$PGDATA/$log_dir
 ##数据库用户家目录
 os_home=${os_home_1}
 # 记住当前目录
