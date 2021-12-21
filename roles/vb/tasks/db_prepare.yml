@@ -1,0 +1,20 @@
+---
+#==============================================================#
+# debug   info                                                 #
+#==============================================================#
+
+
+- name: vastbase G100 prepare
+  tags: Check preparations 
+  become: yes
+  block:
+    - name:  copy check sh 
+      copy: src=db_check/shell/check_os.sh dest="{{ vb_an_conf }}/db_check" owner={{ vb_db_su }} group=vastbase mode=0744
+
+    - name:  debug info  sh
+      #chdir: "{{ vb_an_conf }}/db_inspection"
+      shell :  "cd {{ vb_an_conf }}/db_check/ &&{{ vb_an_conf }}/db_check/check_os.sh  "
+      register: result
+
+    - name: Show debug info
+      debug: var=result.stdout_lines verbosity=0
