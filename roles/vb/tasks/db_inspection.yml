@@ -9,14 +9,14 @@
   become: yes
   block:
     - name: Make sure main and backup dir exists
-      file: path={{ item }} state=directory owner={{ vb_db_su }}   group=vastbase mode=0777
+      file: path={{ item }} state=directory owner={{ vb_db_su }}   group={{ vb_db_su }} mode=0777
       with_items: 
         - "{{ vb_an_conf }}"
         - "{{ vb_dcs_conf }}"
     
     # vb_an_confs: create db_inspection   db_check   db_monitor dir
     - name: create vastbase G100 directory structure
-      file: path={{ item }}  state=directory owner={{ vb_db_su }} group=vastbase mode=0700
+      file: path={{ item }}  state=directory owner={{ vb_db_su }} group={{ vb_db_su }} mode=0700
       with_items:
         - "{{ vb_an_conf }}/db_inspection"
         - "{{ vb_an_conf }}/db_check"
@@ -24,12 +24,12 @@
         - "{{ vb_an_conf }}/db_monitor"
       
     - name: Copy generate report 
-      copy: src=db_inspection/shell/generate_report_g100.sh  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group=vastbase mode=0744
+      copy: src=db_inspection/shell/generate_report_g100.sh  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group={{ vb_db_su }} mode=0744
     
     - name: Copy py 
-      copy: src=db_inspection/shell/generate_report_template_v1.0.1.py  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group=vastbase mode=0744
+      copy: src=db_inspection/shell/generate_report_template_v1.0.1.py  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group={{ vb_db_su }} mode=0744
     - name:  Copy template
-      copy: src=db_inspection/shell/Template1.docx  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group=vastbase mode=0744
+      copy: src=db_inspection/shell/Template1.docx  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group={{ vb_db_su }} mode=0744
     
     - name:  execute sh
       #chdir: "{{ vb_an_conf }}/db_inspection" 执行巡检脚本

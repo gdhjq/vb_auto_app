@@ -7,14 +7,29 @@
 - name: vastbase G100 prepare
   tags: Check preparations 
   become: yes
-  block:
+  block:    
+    - name: Make sure main and db check  exists
+      file: path={{ item }} state=directory owner={{ vb_db_su }}   group=vastbase mode=0777
+      with_items: 
+        - "{{ vb_an_conf }}"
+        - "{{ vb_dcs_conf }}"
+    
+    # vb_an_confs: 
+    - name: create vastbase G100 directory structure
+      file: path={{ item }}  state=directory owner={{ vb_db_su }} group=vastbase mode=0700
+      with_items:
+        - "{{ vb_an_conf }}/db_inspection"
+        - "{{ vb_an_conf }}/db_check"
+        - "{{ vb_an_conf }}/backup"
+        - "{{ vb_an_conf }}/db_monitor"
+
     - name:  copy check sh 
       copy: src=db_check/shell/check_os.sh dest="{{ vb_an_conf }}/db_check" owner={{ vb_db_su }} group=vastbase mode=0744
-
-    - name:  debug info  sh
+    
+    - name:  check os info  sh
       #chdir: "{{ vb_an_conf }}/db_inspection"
       shell :  "cd {{ vb_an_conf }}/db_check/ &&{{ vb_an_conf }}/db_check/check_os.sh  "
       register: result
 
-    - name: Show debug info
+    - name: Show check os info
       debug: var=result.stdout_lines verbosity=0

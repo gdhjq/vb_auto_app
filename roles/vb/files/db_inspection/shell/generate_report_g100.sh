@@ -41,6 +41,7 @@ then
   pg_log_dir=$PGDATA/pg_log
 else
   pg_log_dir=$PGDATA/$log_dir
+fi
 ##数据库用户家目录
 os_home=${os_home_1}
 # 记住当前目录
@@ -684,4 +685,3 @@ echo ${os_home},"is secondary." >> $run_log_file
 tar zcvf  secondary_inspection_`date +"%Y-%m-%d"`_${HOST_NAME}.tar.gz *.txt
 scp primary_inspection_`date +"%Y-%m-%d"`_${HOST_NAME}.tar.gz root@${mange_ip}:${mange_inspection}
 fi
-
