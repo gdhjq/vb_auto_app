@@ -37,7 +37,7 @@
       register: result
 
     - name: Show debug info
-      debug: var=result.stdout verbosity=0
+      debug: var=result.stdout_lines verbosity=0
  
     - name:  execute py
       #执行python脚本生成模板文档
@@ -45,4 +45,4 @@
       register: result
     
     - name: Show debug info
-      debug: var=result.stdout verbosity=0
+      debug: var=result.stdout_lines verbosity=0
