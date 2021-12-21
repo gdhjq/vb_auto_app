@@ -20,6 +20,9 @@ db_port=$4
 mange_ip=$5
 mange_inspection=$6
 
+
+
+
 # 请将以下变量修改为与当前环境一致, 并且确保使用这个配置连接任何数据库都不需要输入密码
 export PGHOST=127.0.0.1
 export PGPORT=${db_port}
