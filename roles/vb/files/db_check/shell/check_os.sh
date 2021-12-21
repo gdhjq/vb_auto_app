@@ -40,12 +40,12 @@ __CB='\033[0;34m' # blue
 __CM='\033[0;35m' # magenta
 __CC='\033[0;36m' # cyan
 __CW='\033[0;37m' # white
-function log_info() {  printf "[${__CG} OK ${__CN}] ${__CG}$*${__CN}\n";   }
-function log_warn() {  printf "[${__CY}WARN${__CN}] ${__CY}$*${__CN}\n";   }
-function log_error() { printf "[${__CR}FAIL${__CN}] ${__CR}$*${__CN}\n";   }
-function log_debug() { printf "[${__CB}HINT${__CN}] ${__CB}$*${__CN}\n"; }
-function log_input() { printf "[${__CM} IN ${__CN}] ${__CM}$*\n=> ${__CN}"; }
-function log_hint()  { printf "${__CB}$*${__CN}"; }
+function log_info() {  printf "OK $* \n";   }
+function log_warn() {  printf "WARN $*\n";   }
+function log_error() { printf "FAIL $* \n";   }
+function log_debug() { printf "HINT  $* \n"; }
+function log_input() { printf "IN  $*\n=>"; }
+function log_hint()  { printf "$* "; }
 ipv4_regexp='(([0-9]|[0-9]{2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[0-9]{2}|1[0-9]{2}|2[0-4][0-9]|25[0-5])'
 #==============================================================#
 
@@ -105,7 +105,7 @@ function check_release(){
         eval "$line"
     done < /etc/os-release
     if [[ "${NAME}" == 'CentOS Linux' ]]; then
-        echo "os_name: ${NAME}"
+        #echo "os_name: ${NAME}"
         local full=`cat /etc/centos-release | tr -dc '0-9.'`
         local major=$(cat /etc/centos-release | tr -dc '0-9.'|cut -d \. -f1)
         local minor=$(cat /etc/centos-release | tr -dc '0-9.' |cut -d \.  -f 1,2)
@@ -226,7 +226,6 @@ function main(){
     check_secure     # secure
     python_version   # python
     log_hint "configure Aliceauto done. Use 'make install' to proceed\n"
-
 }
 
 
