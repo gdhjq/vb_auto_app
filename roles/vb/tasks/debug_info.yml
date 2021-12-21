@@ -32,4 +32,4 @@
       register: result
 
     - name: Show debug info
-      debug: var=result.stdout verbosity=0
+      debug: var=result.stdout_lines verbosity=0
