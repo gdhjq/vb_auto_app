@@ -34,8 +34,14 @@ primary_append_list=['数据库复制状态','数据库复制槽状态']
 secondary_append_list=['wal_receiver状态']
 
 
-### get all txt name 
+
 def init_check_result_file_dict(path):
+    """
+    function: get all txt name 
+    input :  inspection result file dir
+    output:  inspection txt name 
+             for example {'1.10': '1.10_sys_uptime.txt',....}
+    """
     f_list = os.listdir(path)
     for fname in f_list:
         if os.path.splitext(fname)[1] == '.txt':
@@ -45,14 +51,23 @@ def init_check_result_file_dict(path):
                 check_result_file_dict[file_pre_num]= fname
 
 
-### get content from check result file ###
 def get_content_from_file(file_name):
+    """
+    function: get content from check result file
+    input :  file_name
+    output:  read file_name  content
+    """
     with open(file_name,encoding='utf-8') as file_obj:
         content = file_obj.read()
         return content
 
-#### def: check_item_detail #####
 def check_item_detail():
+    """
+    function: check_item_detail
+    input :  NA
+    output:  get result 
+             for example {{'sysuptimetxt': ' 13:47:50 up 586 days, 21:41,  2 users,  load average: 1.00, 1.01, 1.05\n',....}
+    """
     for idx_detail  in check_result_file_dict.values():
         idx_keys = re.sub(u"([^\u0041-\u005a\u0061-\u007a])","" ,idx_detail)
       #  if idx_keys == 'ipaddresstxt':
@@ -60,8 +75,12 @@ def check_item_detail():
         idx_result = get_content_from_file(str(idx_detail))
         data_docx[idx_keys] = idx_result
 
-### read content from check result file ###
 def read_content_from_file(fname):
+    """
+    function: get hostname result file
+    input :  file_name
+    output:  read hostname  content
+    """
     with open(fname) as file_obj:
         return file_obj.read().strip('\n')
 
