@@ -12,37 +12,57 @@
       file: path={{ item }} state=directory owner={{ vb_db_su }}   group={{ vb_db_su }} mode=0777
       with_items: 
         - "{{ vb_an_conf }}"
-        - "{{ vb_dcs_conf }}"
+        #- "{{ vb_dcs_conf }}"
     
     # vb_an_confs: create db_inspection   db_check   db_monitor dir
     - name: create vastbase G100 directory structure
       file: path={{ item }}  state=directory owner={{ vb_db_su }} group={{ vb_db_su }} mode=0700
       with_items:
-        - "{{ vb_an_conf }}/db_inspection"
+        - "{{ vb_an_conf }}/db_inspection/shell"
+        - "{{ vb_an_conf }}/db_inspection/resluts"
         - "{{ vb_an_conf }}/db_check"
-        - "{{ vb_an_conf }}/backup"
-        - "{{ vb_an_conf }}/db_monitor"
+        #- "{{ vb_an_conf }}/backup"
+        #- "{{ vb_an_conf }}/db_monitor"
       
     - name: Copy generate report 
-      copy: src=db_inspection/shell/generate_report_g100.sh  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group={{ vb_db_su }} mode=0744
+      copy: src=db_inspection/shell/generate_report_g100.sh  dest="{{ vb_an_conf }}/db_inspection/shell" owner={{ vb_db_su }} group={{ vb_db_su }} mode=0744
     
-    - name: Copy py 
-      copy: src=db_inspection/py/generate_report_template_v1.0.1.py  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group={{ vb_db_su }} mode=0744
-    - name:  Copy template
-      copy: src=db_inspection/template/Template1.docx  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group={{ vb_db_su }} mode=0744
+    #- name: Copy py 
+    #  copy: src=db_inspection/py/generate_report_template_v1.0.1.py  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group={{ vb_db_su }} mode=0744
+    #- name:  Copy template
+    #  copy: src=db_inspection/template/Template1.docx  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group={{ vb_db_su }} mode=0744
+    - name: copy om
+      copy: src=vb_om.sh dest="{{ vb_an_conf }}" owner={{ vb_db_su }} group={{ vb_db_su }} mode=0744
     
-    - name:  execute sh
-      #chdir: "{{ vb_an_conf }}/db_inspection" 执行巡检脚本
-      shell :  "cd {{ vb_an_conf }}/db_inspection/ &&{{ vb_an_conf }}/db_inspection/generate_report_g100.sh    {{ os_home }}  {{ vb_db_home }}  {{ vb_data }} {{ vb_port }} {{ mange_ip }} {{ mange_inspection }} "
+    
+    - name:  execute om sh
+      #chdir: "{{ vb_an_conf }}/vb_om.sh "  执行巡检脚本
+      shell :  "cd {{ vb_an_conf }}/ &&{{ vb_an_conf }}/vb_om.sh    -i  -b {{ vb_db_home }}  -D {{ vb_data }}  -p {{ vb_port }} "
       register: result
 
     - name: Show debug info
       debug: var=result.stdout_lines verbosity=0
- 
-    - name:  execute py
+
+    # 批量传输巡检文件
+    - name: find file
+      find: 
+        paths: "{{ vb_an_conf }}/db_inspection/resluts/"
+        patterns: "*tar.gz"
+        recurse: no
+      register: file_name
+
+    - name: copy_file
+      fetch:
+        src: "{{ item.path }}"
+        dest: "{{ mange_inspection }}"
+        flat: yes
+      with_items: "{{ file_name.files }}"
+
+      
+   # - name:  execute py
       #执行python脚本生成模板文档
-      shell :  "cd {{ vb_an_conf }}/db_inspection/ &&dos2unix {{ vb_an_conf }}/db_inspection/generate_report_template_v1.0.1.py &&{{ vb_an_conf }}/db_inspection/generate_report_template_v1.0.1.py "
-      register: result
+    #  shell :  "cd {{ vb_an_conf }}/db_inspection/ &&{{ vb_an_conf }}/db_inspection/generate_report_template_v1.0.1.py &&{{ vb_an_conf }}/db_inspection/generate_report_template_v1.0.1.py "
+   #   register: result
     
-    - name: Show debug info
-      debug: var=result.stdout_lines verbosity=0
+   # - name: Show debug info
+    #  debug: var=result.stdout_lines verbosity=0

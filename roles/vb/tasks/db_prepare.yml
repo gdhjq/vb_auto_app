@@ -28,7 +28,7 @@
     
     - name:  check os info  sh
       #chdir: "{{ vb_an_conf }}/db_inspection"
-      shell :  "cd {{ vb_an_conf }}/db_check/ &&{{ vb_an_conf }}/db_check/check_os.sh  "
+      shell :  "cd {{ vb_an_conf }}/db_check/ &&{{ vb_an_conf }}/db_check/check_os.sh {{ vb_db_home }} {{ vb_data }}  {{ vb_port }} "
       register: result
 
     - name: Show check os info

@@ -4,8 +4,8 @@
 #------------------------------------------------------------------------------
 # prepare
 #------------------------------------------------------------------------------
-- import_tasks: db_prepare.yml
-  tags: vb_prepare
+#- import_tasks: db_prepare.yml
+  #tags: pg_prepare
 
 #------------------------------------------------------------------------------
 # install
@@ -17,12 +17,12 @@
 #------------------------------------------------------------------------------
 # generate  report     inspection
 #------------------------------------------------------------------------------
-- import_tasks: db_inspection.yml
-  tags: vb_inspection
+#- import_tasks: db_inspection.yml
+  #tags: pg_inspection
 
 
 #------------------------------------------------------------------------------
 # generate  report     inspection
 #------------------------------------------------------------------------------
-- import_tasks: debug_info.yml
-  tags: vb_debug_info
+#- import_tasks: debug_info.yml
+  #tags: pg_debug_info

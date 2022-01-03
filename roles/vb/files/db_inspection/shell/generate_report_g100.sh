@@ -5,18 +5,18 @@
 # Ctime     :   2021-11-27
 # Mtime     :   2021-11-27
 # Desc      :   vastbase G100  inspection script
-# Path      :   ../files/generate_report_g100
+# Path      :   ../files/db_inspection/shell/generate_report_g100
 # Depend    :   .pgpass
-# Author    :   Alice bat 
+# Author    :   Alicebat 
 #==============================================================#
 
 #数据库配置
 #vastbase_login_info = off  关闭登陆输出   
 
-os_home_1=$1
-vb_home=$2
-vb_data=$3
-db_port=$4 
+
+vb_home=$1
+vb_data=$2
+db_port=$3 
 mange_ip=$5
 mange_inspection=$6
 
@@ -43,9 +43,12 @@ else
   pg_log_dir=$PGDATA/$log_dir
 fi
 ##数据库用户家目录
-os_home=${os_home_1}
+#os_home=${os_home_1}
 # 记住当前目录
 PWD=`pwd`
+
+mkdir ${db_port}
+
 
 run_log_file="generate_vb_file_$(date "+%Y_%m_%d_%H_%M_%S").log"
 primary_file='is_primary.txt'
@@ -53,98 +56,98 @@ log_date=`date +"%Y-%m"`
 
 
 
-echo "###########################################################################" > $run_log_file
-echo "#                       1.os system info                                  #" >> $run_log_file
-echo "###########################################################################" >> $run_log_file
-echo "### os info start #####" >> $run_log_file
-echo "## 1.1 hostname ###" >> $run_log_file
+echo "###########################################################################" > ${db_port}/$run_log_file
+echo "#                       1.os system info                                  #" >> ${db_port}/$run_log_file
+echo "###########################################################################" >> ${db_port}/$run_log_file
+echo "### os info start #####" >> ${db_port}/$run_log_file
+echo "## 1.1 hostname ###" >> ${db_port}/$run_log_file
 HOST_NAME=`hostname -s`
-echo ${HOST_NAME}> 1.1_hostname.txt
+echo ${HOST_NAME}> ${db_port}/1.1_hostname.txt
 
-echo "## 1.2 ip address ###"  >> $run_log_file
-ip addr show > 1.2_ip_address.txt 
+echo "## 1.2 ip address ###"  >> ${db_port}/$run_log_file
+ip addr show > ${db_port}/1.2_ip_address.txt 
 
-echo "## 1.3 os kernel ###"  >> $run_log_file
-uname -a > 1.3_os_kernel.txt 
+echo "## 1.3 os kernel ###"  >> ${db_port}/$run_log_file
+uname -a > ${db_port}/1.3_os_kernel.txt 
 
-echo "## 1.4 memory ###"  >> $run_log_file
-free -m > 1.4_memory.txt 
+echo "## 1.4 memory ###"  >> ${db_port}/$run_log_file
+free -m > ${db_port}/1.4_memory.txt 
 
-echo "## 1.5 CPU ###"  >> $run_log_file
-lscpu > 1.5_cpu.txt
+echo "## 1.5 CPU ###"  >> ${db_port}/$run_log_file
+lscpu > ${db_port}/1.5_cpu.txt
 
-echo "## 1.6 os_sysctl ###"  >> $run_log_file
-grep "^[a-z]" /etc/sysctl.conf > 1.6_os_sysctl.txt 
+echo "## 1.6 os_sysctl ###"  >> ${db_port}/$run_log_file
+grep "^[a-z]" /etc/sysctl.conf > ${db_port}/1.6_os_sysctl.txt 
 
-echo "## 1.7 database user limit  ###"  >> $run_log_file
-grep -v "^#" /etc/security/limits.conf|grep -v "^$" > 1.7_user_limit.txt 
+echo "## 1.7 database user limit  ###" >> ${db_port}/$run_log_file
+grep -v "^#" /etc/security/limits.conf|grep -v "^$" > ${db_port}/1.7_user_limit.txt 
 
-echo "## 1.8 selinux  ###"  >> $run_log_file
-getsebool > 1.8_selinux.txt 
-sestatus >> 1.8_selinux.txt 
+echo "## 1.8 selinux  ###"  >> ${db_port}/$run_log_file
+getsebool > ${db_port}/1.8_selinux.txt 
+sestatus >> ${db_port}/1.8_selinux.txt 
 
-echo "## 1.9 Transparent Huge Pages  ###"  >> $run_log_file
-cat /sys/kernel/mm/transparent_hugepage/enabled > 1.9_hugepage.txt
-cat /sys/kernel/mm/transparent_hugepage/defrag >> 1.9_hugepage.txt
+echo "## 1.9 Transparent Huge Pages  ###"  >> ${db_port}/$run_log_file
+cat /sys/kernel/mm/transparent_hugepage/enabled > ${db_port}/1.9_hugepage.txt
+cat /sys/kernel/mm/transparent_hugepage/defrag >> ${db_port}/1.9_hugepage.txt
 
-echo "## 1.10 dir util  ###"  >> $run_log_file
-df -h  > 1.10_dir_util.txt 
+echo "## 1.10 dir util  ###"  >> ${db_port}/$run_log_file
+df -h  > ${db_port}/1.10_dir_util.txt 
 
-echo "### os info end #####"  >> $run_log_file
+echo "### os info end #####"  >> ${db_port}/$run_log_file
 
-echo "###########################################################################"  >> $run_log_file
-echo "#                       2.database info                                   #"  >> $run_log_file
-echo "###########################################################################"  >> $run_log_file
-echo "## 2.1 database version  ###"  >> $run_log_file
-vsql --pset=pager=off -q -c 'select version()' -W ${PGPASSWORD}  > 2.1_version.txt 
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "#                       2.database info                                   #"  >> ${db_port}/$run_log_file
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "## 2.1 database version  ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c 'select version()' -W ${PGPASSWORD}  > ${db_port}/2.1_version.txt 
 
-echo "## 2.2 database extension  ###"  >> $run_log_file
+echo "## 2.2 database extension  ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -q -c 'select current_database(),* from pg_extension' -W ${PGPASSWORD}
-done > 2.2_db_extension.txt
+done > ${db_port}/2.2_db_extension.txt
 
-echo "## 2.3 database type  ###"  >> $run_log_file
+echo "## 2.3 database type  ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -q -c 'select current_database(),b.typname,count(*) from pg_attribute a,pg_type b where a.atttypid=b.oid and a.attrelid in (select oid from pg_class where relnamespace not in (select oid from pg_namespace where nspname ~ $$^pg_$$ or nspname=$$information_schema$$)) group by 1,2 order by 3 desc ' -W ${PGPASSWORD}
-done  > 2.3_type.txt 
+done  > ${db_port}/2.3_type.txt 
 
-echo "## 2.4 database objects  ###"  >> $run_log_file
+echo "## 2.4 database objects  ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -q -c 'select current_database(),rolname,nspname,relkind,count(*) from pg_class a,pg_authid b,pg_namespace c where a.relnamespace=c.oid and a.relowner=b.oid and nspname !~ $$^pg_$$ and nspname<>$$information_schema$$ group by 1,2,3,4 order by 5 desc' -W ${PGPASSWORD}
-done > 2.4_objects.txt
+done > ${db_port}/2.4_objects.txt
 
-echo "## 2.5 db space  ###"  >> $run_log_file
+echo "## 2.5 db space  ###"  >> ${db_port}/$run_log_file
 for db in `psql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -q -c 'select current_database(),buk this_buk_no,cnt rels_in_this_buk,pg_size_pretty(min) buk_min,pg_size_pretty(max) buk_max from( select row_number() over (partition by buk order by tsize),tsize,buk,min(tsize) over (partition by buk),max(tsize) over (partition by buk),count(*) over (partition by buk) cnt from ( select pg_relation_size(a.oid) tsize, width_bucket(pg_relation_size(a.oid),tmin-1,tmax+1,10) buk from (select min(pg_relation_size(a.oid)) tmin,max(pg_relation_size(a.oid)) tmax from pg_class a,pg_namespace c where a.relnamespace=c.oid and nspname !~ $$^pg_$$ and nspname<>$$information_schema$$) t, pg_class a,pg_namespace c where a.relnamespace=c.oid and nspname !~ $$^pg_$$ and nspname<>$$information_schema$$ ) t)t where row_number=1;' -W ${PGPASSWORD}
-done > 2.5_db_space.txt 
+done > ${db_port}/2.5_db_space.txt 
 
 
 
-echo "###########################################################################"  >> $run_log_file
-echo "#                       3.database conf                                   #"  >> $run_log_file
-echo "###########################################################################"  >> $run_log_file
-echo "## 3.1 pg_hba.conf md5  ###"  >> $run_log_file
-md5sum $PGDATA/pg_hba.conf  > 3.1_hba_md.txt 
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "#                       3.database conf                                   #"  >> ${db_port}/$run_log_file
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "## 3.1 pg_hba.conf md5  ###"  >> ${db_port}/$run_log_file
+md5sum $PGDATA/pg_hba.conf  > ${db_port}/3.1_hba_md.txt 
 
-echo "## 3.2 pg_hba.conf   ###"  >> $run_log_file
-grep '^\ *[a-z]' $PGDATA/pg_hba.conf > 3.2_pg_hba.txt 
-echo "建议: " >> 3.2_pg_hba.txt 
-echo "    主备配置尽量保持一致, 注意trust和password认证方法的危害(password方法 验证时网络传输密码明文, 建议改为md5), 建议除了unix socket可以使用trust以外, 其他都使用md5或者LDAP认证方法." >> 3.2_pg_hba.txt 
-echo "    建议先设置白名单(超级用户允许的来源IP, 可以访问的数据库), 再设置黑名单(不允许超级用户登陆, reject), 再设置白名单(普通应用), 参考pg_hba.conf中的描述. " >> 3.2_pg_hba.txt 
-echo -e "\n" >> 3.2_pg_hba.txt 
+echo "## 3.2 pg_hba.conf   ###"  >> ${db_port}/$run_log_file
+grep '^\ *[a-z]' $PGDATA/pg_hba.conf > ${db_port}/3.2_pg_hba.txt 
+echo "建议: " >> ${db_port}/3.2_pg_hba.txt 
+echo "    主备配置尽量保持一致, 注意trust和password认证方法的危害(password方法 验证时网络传输密码明文, 建议改为md5), 建议除了unix socket可以使用trust以外, 其他都使用md5或者LDAP认证方法." >> ${db_port}/3.2_pg_hba.txt 
+echo "    建议先设置白名单(超级用户允许的来源IP, 可以访问的数据库), 再设置黑名单(不允许超级用户登陆, reject), 再设置白名单(普通应用), 参考pg_hba.conf中的描述. " >> ${db_port}/3.2_pg_hba.txt 
+echo -e "\n" >> ${db_port}/3.2_pg_hba.txt 
 
-echo "## 3.3 postgresql.conf md5  ###"  >> $run_log_file
-md5sum $PGDATA/postgresql.conf  > 3.3_md.txt 
+echo "## 3.3 postgresql.conf md5  ###"  >> ${db_port}/$run_log_file
+md5sum $PGDATA/postgresql.conf  > ${db_port}/3.3_md.txt 
 
 
-echo "## 3.4 postgresql.conf  ###"  >> $run_log_file
-grep '^\ *[a-z]' $PGDATA/postgresql.conf|awk -F "#" '{print $1}'  > 3.4_postgresql_conf.txt 
-echo "建议: " >> 3.4_postgresql_conf.txt 
-echo "    主备配置尽量保持一致, 配置合理的参数值." >> 3.4_postgresql_conf.txt 
+echo "## 3.4 postgresql.conf  ###"  >> ${db_port}/$run_log_file
+grep '^\ *[a-z]' $PGDATA/postgresql.conf|awk -F "#" '{print $1}'  > ${db_port}/3.4_postgresql_conf.txt 
+echo "建议: " >> ${db_port}/3.4_postgresql_conf.txt 
+echo "    主备配置尽量保持一致, 配置合理的参数值." >> ${db_port}/3.4_postgresql_conf.txt 
 echo -e "    建议修改的参数列表如下  ( 假设操作系统内存为512GB, 数据库独占操作系统, 数据库版本v2.2.4, 其他版本可能略有不同, 未来再更新进来 )  :
 #证书路径
 license_path = '请输入licence绝对路径/licence名称'
@@ -307,95 +310,95 @@ pgxc_node_name = 'vdb'
 job_queue_processes = 10
 default_storage_nodegroup = 'installation'
 expected_computing_nodegroup = 'query'
-\n"  >> 3.4_postgresql_conf.txt 
+\n"  >> ${db_port}/3.4_postgresql_conf.txt 
 
 
-echo "## 3.5  db_user conf   ###"  >> $run_log_file
-vsql --pset=pager=off -q -c 'select * from pg_db_role_setting' -W ${PGPASSWORD}  > 3.5_db_user_conf.txt 
+echo "## 3.5  db_user conf   ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c 'select * from pg_db_role_setting' -W ${PGPASSWORD}  > ${db_port}/3.5_db_user_conf.txt 
 
 
-echo "###########################################################################"  >> $run_log_file
-echo "#                       4.database error                                   #"  >> $run_log_file
-echo "###########################################################################"  >> $run_log_file
-echo "## 4.1  error log    ###"  >> $run_log_file
-cat  $pg_log_dir/postgresql-${log_date}*.log | grep -E "^[0-9]" | grep -E "ERROR|FATAL|PANIC" |sort -rn |head -10> 4.1_error_log.txt 
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "#                       4.database error                                   #"  >> ${db_port}/$run_log_file
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "## 4.1  error log    ###"  >> ${db_port}/$run_log_file
+cat  $pg_log_dir/postgresql-${log_date}*.log | grep -E "^[0-9]" | grep -E "ERROR|FATAL|PANIC" |sort -rn |head -20> ${db_port}/4.1_error_log.txt 
 
 
-echo "## 4.2  db connection  ###"  >> $run_log_file
-find $pg_log_dir/ -name "postgresql-${log_date}*.log" -type f -mtime -28 -exec grep "connection authorized" {} +|sort|uniq |sort -n -r|head -10 > 4.2_db_connection.txt
+echo "## 4.2  db connection  ###"  >> ${db_port}/$run_log_file
+find $pg_log_dir/ -name "postgresql-${log_date}*.log" -type f -mtime -28 -exec grep "connection authorized" {} +|sort|uniq |sort -n -r|head -20 > ${db_port}/4.2_db_connection.txt
 
 
-echo "## 4.3  password authentication failed  ###"  >> $run_log_file
-find  $pg_log_dir/  -name "postgresql-${log_date}*.log" -type f -mtime -28 -exec grep "password authentication failed" {} +|sort|uniq|sort -n -r > 4.3_authentication_failed.txt 
+echo "## 4.3  password authentication failed  ###"  >> ${db_port}/$run_log_file
+find  $pg_log_dir/  -name "postgresql-${log_date}*.log" -type f -mtime -28 -exec grep "password authentication failed" {} +|sort|uniq|sort -n -r > ${db_port}/4.3_authentication_failed.txt 
 
 
-echo "###########################################################################"  >> $run_log_file
-echo "#                       5.Database space usage analysis                   #"  >> $run_log_file
-echo "###########################################################################"  >> $run_log_file
-echo "## 5.1  echo tablespace dir   ###"  >> $run_log_file
-ls -la $PGDATA/pg_tblspc/ > 5.1_echo_tablespace.txt
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "#                       5.Database space usage analysis                   #"  >> ${db_port}/$run_log_file
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "## 5.1  echo tablespace dir   ###"  >> ${db_port}/$run_log_file
+ls -la $PGDATA/pg_tblspc/ > ${db_port}/5.1_echo_tablespace.txt
 
-echo "## 5.2  tablespace usg   ###"  >> $run_log_file
-vsql --pset=pager=off -q -c 'select spcname,pg_tablespace_location(oid),pg_size_pretty(pg_tablespace_size(oid)) from pg_tablespace order by pg_tablespace_size(oid) desc' -W ${PGPASSWORD} > 5.2_tablespace_usg.txt
+echo "## 5.2  tablespace usg   ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c 'select spcname,pg_tablespace_location(oid),pg_size_pretty(pg_tablespace_size(oid)) from pg_tablespace order by pg_tablespace_size(oid) desc' -W ${PGPASSWORD} > ${db_port}/5.2_tablespace_usg.txt
 
-echo "## 5.3  dastbase usg   ###"  >> $run_log_file
-vsql --pset=pager=off -q -c 'select datname,pg_size_pretty(pg_database_size(oid)) from pg_database order by pg_database_size(oid) desc' -W ${PGPASSWORD} > 5.3_database_usg.txt
+echo "## 5.3  dastbase usg   ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c 'select datname,pg_size_pretty(pg_database_size(oid)) from pg_database order by pg_database_size(oid) desc' -W ${PGPASSWORD} > ${db_port}/5.3_database_usg.txt
 
-echo "## 5.4   TOP 10 size   ###"  >> $run_log_file
+echo "## 5.4   TOP 10 size   ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -q -c 'select current_database(),b.nspname,c.relname,c.relkind,pg_size_pretty(pg_relation_size(c.oid)),a.seq_scan,a.seq_tup_read,a.idx_scan,a.idx_tup_fetch,a.n_tup_ins,a.n_tup_upd,a.n_tup_del,a.n_tup_hot_upd,a.n_live_tup,a.n_dead_tup from pg_stat_all_tables a, pg_class c,pg_namespace b where c.relnamespace=b.oid and c.relkind=$$r$$ and a.relid=c.oid order by pg_relation_size(c.oid) desc limit 10' -W ${PGPASSWORD}
-done > 5.4_top_object.txt
+done > ${db_port}/5.4_top_object.txt
 
 
-echo "###########################################################################"  >> $run_log_file
-echo "#                       6.Database connection  analysis                   #"  >> $run_log_file
-echo "###########################################################################"  >> $run_log_file
-echo "## 6.1  connection activity   ###"  >> $run_log_file
-vsql --pset=pager=off -q -c 'select now(),state,count(*) from pg_stat_activity group by 1,2' -W ${PGPASSWORD} > 6.1_activity.txt
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "#                       6.Database connection  analysis                   #"  >> ${db_port}/$run_log_file
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "## 6.1  connection activity   ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c 'select now(),state,count(*) from pg_stat_activity group by 1,2' -W ${PGPASSWORD} > ${db_port}/6.1_activity.txt
 
 
-echo "## 6.2  count connection   ###"  >> $run_log_file
-vsql --pset=pager=off -q -c 'select t3.max_conn,t1.used,t3.max_conn-used-t1.used res_for_normal from (select count(*) used from pg_stat_activity) t1, (select setting::int max_conn from pg_settings where name=$$max_connections$$) t3' -W ${PGPASSWORD} > 6.2_count_connection.txt
+echo "## 6.2  count connection   ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c 'select t3.max_conn,t1.used,t3.max_conn-used-t1.used res_for_normal from (select count(*) used from pg_stat_activity) t1, (select setting::int max_conn from pg_settings where name=$$max_connections$$) t3' -W ${PGPASSWORD} > ${db_port}/6.2_count_connection.txt
 
-echo "## 6.3  user limit connection   ###"  >> $run_log_file
-vsql --pset=pager=off -q -c 'select a.rolname,a.rolconnlimit,b.connects from pg_authid a,(select usename,count(*) connects from pg_stat_activity group by usename) b where a.rolname=b.usename order by b.connects desc' -W ${PGPASSWORD} > 6.3_user_limit.txt
-
-
-echo "## 6.4  database limit  connection   ###"  >> $run_log_file
-vsql --pset=pager=off -q -c 'select a.datname, a.datconnlimit, b.connects from pg_database a,(select datname,count(*) connects from pg_stat_activity group by datname) b where a.datname=b.datname order by b.connects desc' -W ${PGPASSWORD} >6.4_database_limit.txt
+echo "## 6.3  user limit connection   ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c 'select a.rolname,a.rolconnlimit,b.connects from pg_authid a,(select usename,count(*) connects from pg_stat_activity group by usename) b where a.rolname=b.usename order by b.connects desc' -W ${PGPASSWORD} > ${db_port}/6.3_user_limit.txt
 
 
-echo "###########################################################################"  >> $run_log_file
-echo "#                       7.Database Performance analysis                   #"  >> $run_log_file
-echo "###########################################################################"  >> $run_log_file
-echo "## 7.1  TOP 5 SQL : total_cpu_time   ###"  >> $run_log_file
-vsql --pset=pager=off -q -x -c 'select c.rolname,b.datname,a.total_time/a.calls per_call_time,a.* from pg_stat_statements a,pg_database b,pg_authid c where a.userid=c.oid and a.dbid=b.oid order by a.total_time desc limit 5' -W ${PGPASSWORD} > 7.1_total_cpu_time.txt
+echo "## 6.4  database limit  connection   ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c 'select a.datname, a.datconnlimit, b.connects from pg_database a,(select datname,count(*) connects from pg_stat_activity group by datname) b where a.datname=b.datname order by b.connects desc' -W ${PGPASSWORD} >${db_port}/6.4_database_limit.txt
 
 
-echo "## 7.2   索引数超过4并且SIZE大于10MB的表:   ###"  >> $run_log_file
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "#                       7.Database Performance analysis                   #"  >> ${db_port}/$run_log_file
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "## 7.1  TOP 5 SQL : total_cpu_time   ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -x -c 'select c.rolname,b.datname,a.total_time/a.calls per_call_time,a.* from pg_stat_statements a,pg_database b,pg_authid c where a.userid=c.oid and a.dbid=b.oid order by a.total_time desc limit 5' -W ${PGPASSWORD} > ${db_port}/7.1_total_cpu_time.txt
+
+
+echo "## 7.2   索引数超过4并且SIZE大于10MB的表:   ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -q -c 'select current_database(), t2.nspname, t1.relname, pg_size_pretty(pg_relation_size(t1.oid)), t3.idx_cnt from pg_class t1, pg_namespace t2, (select indrelid,count(*) idx_cnt from pg_index group by 1 having count(*)>4) t3 where t1.oid=t3.indrelid and t1.relnamespace=t2.oid and pg_relation_size(t1.oid)/1024/1024.0>10 order by t3.idx_cnt desc' -W ${PGPASSWORD}
-done > 7.2_index_mb.txt
+done > ${db_port}/7.2_index_mb.txt
 
-echo "## 7.3  上次巡检以来未使用或使用较少的索引:   ###"  >> $run_log_file
+echo "## 7.3  上次巡检以来未使用或使用较少的索引:   ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -q -c 'select current_database(),t2.schemaname,t2.relname,t2.indexrelname,t2.idx_scan,t2.idx_tup_read,t2.idx_tup_fetch,pg_size_pretty(pg_relation_size(indexrelid)) from pg_stat_all_tables t1,pg_stat_all_indexes t2 where t1.relid=t2.relid and t2.idx_scan<10 and t2.schemaname not in ($$pg_toast$$,$$pg_catalog$$) and indexrelid not in (select conindid from pg_constraint where contype in ($$p$$,$$u$$,$$f$$)) and pg_relation_size(indexrelid)>65536 order by pg_relation_size(indexrelid) desc' -W ${PGPASSWORD}
-done > 7.3_little_used_index.txt
+done > ${db_port}/7.3_little_used_index.txt
 
-echo "## 7.4   数据库统计信息, 回滚比例, 命中比例, 数据块读写时间, 死锁, 复制冲突:   ###"  >> $run_log_file
-vsql --pset=pager=off -q -c 'select datname,round(100*(xact_rollback::numeric/(case when xact_commit > 0 then xact_commit else 1 end + xact_rollback)),2)||$$ %$$ rollback_ratio, round(100*(blks_hit::numeric/(case when blks_read>0 then blks_read else 1 end + blks_hit)),2)||$$ %$$ hit_ratio, blk_read_time, blk_write_time, conflicts, deadlocks from pg_stat_database' -W ${PGPASSWORD} > 7.4_count_information.txt
+echo "## 7.4   数据库统计信息, 回滚比例, 命中比例, 数据块读写时间, 死锁, 复制冲突:   ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c 'select datname,round(100*(xact_rollback::numeric/(case when xact_commit > 0 then xact_commit else 1 end + xact_rollback)),2)||$$ %$$ rollback_ratio, round(100*(blks_hit::numeric/(case when blks_read>0 then blks_read else 1 end + blks_hit)),2)||$$ %$$ hit_ratio, blk_read_time, blk_write_time, conflicts, deadlocks from pg_stat_database' -W ${PGPASSWORD} > ${db_port}/7.4_count_information.txt
 
-echo "## 7.5  检查点, bgwriter 统计信息:   ###"  >> $run_log_file
-vsql --pset=pager=off -q -x -c 'select * from pg_stat_bgwriter'  -W ${PGPASSWORD} > 7.5_bgwriter.txt
+echo "## 7.5  检查点, bgwriter 统计信息:   ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -x -c 'select * from pg_stat_bgwriter'  -W ${PGPASSWORD} > ${db_port}/7.5_bgwriter.txt
 
 
-echo "###########################################################################"  >> $run_log_file
-echo "#                       8.Database garbage analysis                       #"  >> $run_log_file
-echo "###########################################################################"  >> $run_log_file
-echo "## 8.1  Index inflation check   ###"  >> $run_log_file
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "#                       8.Database garbage analysis                       #"  >> ${db_port}/$run_log_file
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "## 8.1  Index inflation check   ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -q -x -c 'SELECT
@@ -467,16 +470,16 @@ FROM (
   LEFT JOIN pg_index i ON indrelid = cc.oid
   LEFT JOIN pg_class c2 ON c2.oid = i.indexrelid
 ) AS sml order by wastedibytes desc limit 5' -W ${PGPASSWORD}
-done > 8.1_index_inflation_check.txt
+done > ${db_port}/8.1_index_inflation_check.txt
 
 
-echo "## 8.2  junk data   ###"  >> $run_log_file
+echo "## 8.2  junk data   ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -q -c 'select current_database(),schemaname,relname,n_dead_tup from pg_stat_all_tables where n_live_tup>0 and n_dead_tup/n_live_tup>0.2 and schemaname not in ($$pg_toast$$,$$pg_catalog$$) order by n_dead_tup desc limit 5' -W ${PGPASSWORD}
-done > 8.2_junk_data.txt
+done > ${db_port}/8.2_junk_data.txt
 
-echo "## 8.3  table inflation check   ###"  >> $run_log_file
+echo "## 8.3  table inflation check   ###"  >> ${db_port}/$run_log_file
 for db in `psql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 psql -d $db --pset=pager=off -q -x -c 'SELECT    
@@ -548,110 +551,110 @@ FROM (
   LEFT JOIN pg_index i ON indrelid = cc.oid    
   LEFT JOIN pg_class c2 ON c2.oid = i.indexrelid    
 ) AS sml order by wastedbytes desc limit 5' -W ${PGPASSWORD}
-done  > 8.3_table_inflation_check.txt
+done  > ${db_port}/8.3_table_inflation_check.txt
 
 
-echo "###########################################################################"  >> $run_log_file
-echo "#                       9.Database age analysis                           #"  >> $run_log_file
-echo "###########################################################################"  >> $run_log_file
-echo "## 9.1  database age    ###"  >> $run_log_file
-vsql --pset=pager=off -q -c 'SELECT datname, age(datfrozenxid64) FROM pg_database order by age(datfrozenxid64) desc' -W ${PGPASSWORD} > 9.1_database_age.txt
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "#                       9.Database age analysis                           #"  >> ${db_port}/$run_log_file
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "## 9.1  database age    ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c 'SELECT datname, age(datfrozenxid64) FROM pg_database order by age(datfrozenxid64) desc' -W ${PGPASSWORD} > ${db_port}/9.1_database_age.txt
 
-echo "## 9.2  table age    ###"  >> $run_log_file
+echo "## 9.2  table age    ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -q -c "SELECT c.oid::regclass as table_name,greatest(age(c.relfrozenxid64),age(t.relfrozenxid64)) as age FROM pg_class c  LEFT JOIN pg_class t ON c.reltoastrelid = t.oid WHERE c.relkind IN ('r', 'm') order by 2 desc limit 5;" -W ${PGPASSWORD}
-done > 9.2_table_age.txt
+done > ${db_port}/9.2_table_age.txt
 
-echo "## 9.3  Long transaction , 2PC:    ###"  >> $run_log_file
-vsql --pset=pager=off -q -x -c 'select datname,usename,query,xact_start,now()-xact_start xact_duration,query_start,now()-query_start query_duration,state from pg_stat_activity where state<>$$idle$$  and now()-xact_start > interval $$30 min$$ order by xact_start' -W ${PGPASSWORD} > 9.3_long_transaction.txt
-vsql --pset=pager=off -q -x -c 'select name,statement,prepare_time,now()-prepare_time,parameter_types,from_sql from pg_prepared_statements where now()-prepare_time > interval $$30 min$$ order by prepare_time' -W ${PGPASSWORD} >> 9.3_long_transaction.txt
-
-
-echo "###########################################################################"  >> $run_log_file
-echo "#     10.Database XLOG, stream replication status analysis                #"  >> $run_log_file
-echo "###########################################################################"  >> $run_log_file
-echo "## 10.1 $$archive_mode$$,$$autovacuum$$,$$archive_command$$   on  ###"  >> $run_log_file
-vsql --pset=pager=off -q -c 'select name,setting from pg_settings where name in ($$archive_mode$$,$$autovacuum$$,$$archive_command$$)' -W ${PGPASSWORD} > 10.1_on.txt
+echo "## 9.3  Long transaction , 2PC:    ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -x -c 'select datname,usename,query,xact_start,now()-xact_start xact_duration,query_start,now()-query_start query_duration,state from pg_stat_activity where state<>$$idle$$  and now()-xact_start > interval $$30 min$$ order by xact_start' -W ${PGPASSWORD} > ${db_port}/9.3_long_transaction.txt
+vsql --pset=pager=off -q -x -c 'select name,statement,prepare_time,now()-prepare_time,parameter_types,from_sql from pg_prepared_statements where now()-prepare_time > interval $$30 min$$ order by prepare_time' -W ${PGPASSWORD} >> ${db_port}/9.3_long_transaction.txt
 
 
-echo "## 10.2  archive count ###"  >> $run_log_file
-vsql --pset=pager=off -q -c 'select pg_xlogfile_name(pg_current_xlog_insert_location())' -W ${PGPASSWORD} > 10.2_archive_count.txt
-
-echo "## 10.3  Stream replication  ###"  >> $run_log_file
-vsql --pset=pager=off -q -x -c 'select pid,state,client_addr,pg_size_pretty(pg_xlog_location_diff(pg_current_xlog_insert_location(),sender_sent_location)) sent_delay, pg_size_pretty(pg_xlog_location_diff(pg_current_xlog_insert_location(),receiver_replay_location))  replay_delay, sync_priority,sync_state   from pg_stat_replication' -W ${PGPASSWORD} > 10.3_stream.txt
-
-echo "## 10.4   replication solt  ###"  >> $run_log_file
-vsql --pset=pager=off -q -c ' select pg_xlog_location_diff(pg_current_xlog_insert_location(),restart_lsn), * from pg_replication_slots;' -W ${PGPASSWORD} > 10.4_replication_solt.txt
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "#     10.Database XLOG, stream replication status analysis                #"  >> ${db_port}/$run_log_file
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "## 10.1 $$archive_mode$$,$$autovacuum$$,$$archive_command$$   on  ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c 'select name,setting from pg_settings where name in ($$archive_mode$$,$$autovacuum$$,$$archive_command$$)' -W ${PGPASSWORD} > ${db_port}/10.1_on.txt
 
 
+echo "## 10.2  archive count ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c 'select pg_xlogfile_name(pg_current_xlog_insert_location())' -W ${PGPASSWORD} > ${db_port}/10.2_archive_count.txt
 
-echo "###########################################################################"  >> $run_log_file
-echo "#     11.Database safe                                                    #"  >> $run_log_file
-echo "###########################################################################"  >> $run_log_file
+echo "## 10.3  Stream replication  ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -x -c 'select pid,state,client_addr,pg_size_pretty(pg_xlog_location_diff(pg_current_xlog_insert_location(),sender_sent_location)) sent_delay, pg_size_pretty(pg_xlog_location_diff(pg_current_xlog_insert_location(),receiver_replay_location))  replay_delay, sync_priority,sync_state   from pg_stat_replication' -W ${PGPASSWORD} > ${db_port}/10.3_stream.txt
 
-echo "## 11.1  检查 ~/.psql_history :  ###"  >> $run_log_file
-grep -i "password" ${os_home}/.vsql_history|grep -i -E "role|group|user" > 11.1_psql_history.txt
-
-echo "## 11.2  检查 *.log :   ###"  >> $run_log_file
-cat  $pg_log_dir/postgresql-${log_date}*.log | grep -E "^[0-9]" | grep -i -r -E "role|group|user" |grep -i "password"|grep -i -E "create|alter" > 11.2_check_log.txt
+echo "## 10.4   replication solt  ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c ' select pg_xlog_location_diff(pg_current_xlog_insert_location(),restart_lsn), * from pg_replication_slots;' -W ${PGPASSWORD} > ${db_port}/10.4_replication_solt.txt
 
 
-echo "## 11.3  检查 pg_stat_statements    ###"  >> $run_log_file
-vsql --pset=pager=off -c 'select query from pg_stat_statements where (query ~* $$group$$ or query ~* $$user$$ or query ~* $$role$$) and query ~* $$password$$'  -W ${PGPASSWORD} > 11.3_check_statements.txt
 
-echo "## 11.4  检查 pg_authid :    ###"  >> $run_log_file
-vsql --pset=pager=off -q -c 'select * from pg_authid where rolpassword !~ $$^md5$$ or length(rolpassword)<>35' -W ${PGPASSWORD} > 11.4_pg_authid.txt
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "#     11.Database safe                                                    #"  >> ${db_port}/$run_log_file
+echo "###########################################################################"  >> ${db_port}/$run_log_file
 
-echo "## 11.5 检查 pg_user_mappings, pg_views :   ###"  >> $run_log_file
+#echo "## 11.1  检查 ~/.psql_history :  ###"  >> $run_log_file
+#grep -i "password" ${os_home}/.vsql_history|grep -i -E "role|group|user" > 11.1_psql_history.txt
+
+echo "## 11.2  检查 *.log :   ###"  >> ${db_port}/$run_log_file
+cat  $pg_log_dir/postgresql-${log_date}*.log | grep -E "^[0-9]" | grep -i -r -E "role|group|user" |grep -i "password"|grep -i -E "create|alter" > ${db_port}/11.2_check_log.txt
+
+
+echo "## 11.3  检查 pg_stat_statements    ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -c 'select query from pg_stat_statements where (query ~* $$group$$ or query ~* $$user$$ or query ~* $$role$$) and query ~* $$password$$'  -W ${PGPASSWORD} > ${db_port}/11.3_check_statements.txt
+
+echo "## 11.4  检查 pg_authid :    ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c 'select * from pg_authid where rolpassword !~ $$^md5$$ or length(rolpassword)<>35' -W ${PGPASSWORD} > ${db_port}/11.4_pg_authid.txt
+
+echo "## 11.5 检查 pg_user_mappings, pg_views :   ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -c 'select current_database(),* from pg_user_mappings where umoptions::text ~* $$password$$' -W ${PGPASSWORD}
 vsql -d $db --pset=pager=off -c 'select current_database(),* from pg_views where definition ~* $$password$$ and definition ~* $$dblink$$' -W ${PGPASSWORD}
-done > 11.5_pg_views.txt
+done > ${db_port}/11.5_pg_views.txt
 
-echo "## 11.6  用户密码到期时间:   ###"  >> $run_log_file
-vsql --pset=pager=off -q -c 'select rolname,rolvaliduntil from pg_authid order by rolvaliduntil' -W ${PGPASSWORD} > 11.6_passwd_authid.txt
+echo "## 11.6  用户密码到期时间:   ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c 'select rolname,rolvaliduntil from pg_authid order by rolvaliduntil' -W ${PGPASSWORD} > ${db_port}/11.6_passwd_authid.txt
 
-echo "## 11.7  普通用户对象上的规则安全检查:  ###"  >> $run_log_file
+echo "## 11.7  普通用户对象上的规则安全检查:  ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -c 'select current_database(),a.schemaname,a.tablename,a.rulename,a.definition from pg_rules a,pg_namespace b,pg_class c,pg_authid d where a.schemaname=b.nspname and a.tablename=c.relname and d.oid=c.relowner and not d.rolsuper union all select current_database(),a.schemaname,a.viewname,a.viewowner,a.definition from pg_views a,pg_namespace b,pg_class c,pg_authid d where a.schemaname=b.nspname and a.viewname=c.relname and d.oid=c.relowner and not d.rolsuper' -W ${PGPASSWORD}
-done > 11.7_user_safe.txt
+done > ${db_port}/11.7_user_safe.txt
 
-echo "## 11.8 普通用户自定义函数安全检查:    ###"  >> $run_log_file
+echo "## 11.8 普通用户自定义函数安全检查:    ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -c 'select current_database(),b.rolname,c.nspname,a.proname from pg_proc a,pg_authid b,pg_namespace c where a.proowner=b.oid and a.pronamespace=c.oid and not b.rolsuper and not a.prosecdef' -W ${PGPASSWORD}
-done > 11.8_user_function.txt
+done > ${db_port}/11.8_user_function.txt
 
-echo "## 11.9 unlogged table 和 哈希索引:    ###"  >> $run_log_file
+echo "## 11.9 unlogged table 和 哈希索引:    ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -q -c 'select current_database(),t3.rolname,t2.nspname,t1.relname from pg_class t1,pg_namespace t2,pg_authid t3 where t1.relnamespace=t2.oid and t1.relowner=t3.oid and t1.relpersistence=$$u$$' -W ${PGPASSWORD}
 vsql -d $db --pset=pager=off -q -c 'select current_database(),pg_get_indexdef(oid) from pg_class where relkind=$$i$$ and pg_get_indexdef(oid) ~ $$USING hash$$' -W ${PGPASSWORD}
-done > 11.9_unlogged_table.txt
+done > ${db_port}/11.9_unlogged_table.txt
 
 
-echo "## 11.10 触发器, 事件触发器:   ###"  >> $run_log_file
+echo "## 11.10 触发器, 事件触发器:   ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -q -c 'select current_database(),relname,tgname,proname,tgenabled from pg_trigger t1,pg_class t2,pg_proc t3 where t1.tgfoid=t3.oid and t1.tgrelid=t2.oid' -W ${PGPASSWORD}
 vsql -d $db --pset=pager=off -q -c 'select current_database(),owner,trigger_name,trigger_type,triggering_event,trigger_body,before_statement,after_statement from all_triggers' -W ${PGPASSWORD}
-done  > 11.10_ddl.txt
+done  > ${db_port}/11.10_ddl.txt
 
 
-echo "## 11.11 检查是否使用了a-z 0-9 _ 以外的字母作为对象名:   ###"  >> $run_log_file
-vsql --pset=pager=off -q -c 'select distinct datname from (select datname,regexp_split_to_table(datname,$$$$) word from pg_database) t where (not (ascii(word) >=97 and ascii(word) <=122)) and (not (ascii(word) >=48 and ascii(word) <=57)) and ascii(word)<>95' -W ${PGPASSWORD} > 11.11_special.txt
+echo "## 11.11 检查是否使用了a-z 0-9 _ 以外的字母作为对象名:   ###"  >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -c 'select distinct datname from (select datname,regexp_split_to_table(datname,$$$$) word from pg_database) t where (not (ascii(word) >=97 and ascii(word) <=122)) and (not (ascii(word) >=48 and ascii(word) <=57)) and ascii(word)<>95' -W ${PGPASSWORD} > ${db_port}/11.11_special.txt
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -q -c 'select current_database(),relname,relkind from (select relname,relkind,regexp_split_to_table(relname,$$$$) word from pg_class) t where (not (ascii(word) >=97 and ascii(word) <=122)) and (not (ascii(word) >=48 and ascii(word) <=57)) and ascii(word)<>95 group by 1,2,3' -W ${PGPASSWORD}
 vsql -d $db --pset=pager=off -q -c 'select current_database(), typname from (select typname,regexp_split_to_table(typname,$$$$) word from pg_type) t where (not (ascii(word) >=97 and ascii(word) <=122)) and (not (ascii(word) >=48 and ascii(word) <=57)) and ascii(word)<>95 group by 1,2' -W ${PGPASSWORD}
 vsql -d $db --pset=pager=off -q -c 'select current_database(), proname from (select proname,regexp_split_to_table(proname,$$$$) word from pg_proc where proname !~ $$^RI_FKey_$$) t where (not (ascii(word) >=97 and ascii(word) <=122)) and (not (ascii(word) >=48 and ascii(word) <=57)) and ascii(word)<>95 group by 1,2' -W ${PGPASSWORD}
 vsql -d $db --pset=pager=off -q -c 'select current_database(),nspname,relname,attname from (select nspname,relname,attname,regexp_split_to_table(attname,$$$$) word from pg_class a,pg_attribute b,pg_namespace c where a.oid=b.attrelid and a.relnamespace=c.oid ) t where (not (ascii(word) >=97 and ascii(word) <=122)) and (not (ascii(word) >=48 and ascii(word) <=57)) and ascii(word)<>95 group by 1,2,3,4' -W ${PGPASSWORD}
-done >> 11.11_special.txt
+done >> ${db_port}/11.11_special.txt
 
-echo "## 11.12 ----->>>---->>>  锁等待:  ###"  >> $run_log_file
+echo "## 11.12 ----->>>---->>>  锁等待:  ###"  >> ${db_port}/$run_log_file
 vsql -x --pset=pager=off    -c "
 with    
 t_wait as    
@@ -718,44 +721,44 @@ order by
 from t_unionall   
 group by   
 locktype,datname,relation,page,tuple,virtualxid,transactionid::text,classid,objid,objsubid ;    
-" -W ${PGPASSWORD} > 11.12_lock_wait.txt
+" -W ${PGPASSWORD} > ${db_port}/11.12_lock_wait.txt
 
 
 
-echo "## 11.13 ----->>>---->>>  继承关系检查:   ###"  >> $run_log_file
+echo "## 11.13 ----->>>---->>>  继承关系检查:   ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -q -c 'select inhrelid::regclass,inhparent::regclass,inhseqno from pg_inherits order by 2,3' -W ${PGPASSWORD}
-done >11.13_inheritance_checking.txt
+done >${db_port}/11.13_inheritance_checking.txt
 
 
-echo "## 11.14 ----->>>---->>>  重置统计信息:   ###"  >> $run_log_file
+echo "## 11.14 ----->>>---->>>  重置统计信息:   ###"  >> ${db_port}/$run_log_file
 for db in `vsql --pset=pager=off -t -A -q -c 'select datname from pg_database where datname not in ($$template0$$, $$template1$$)' -W ${PGPASSWORD}`
 do
 vsql -d $db --pset=pager=off -c 'select pg_stat_reset()' -W ${PGPASSWORD}
-done > 11.14_reset.txt
-vsql --pset=pager=off -c 'select pg_stat_reset_shared($$bgwriter$$)' -W ${PGPASSWORD} >> 11.14_reset.txt
-echo "----->>>---->>>  重置pg_stat_statements统计信息: " >> $run_log_file
-vsql --pset=pager=off -q -A -c 'select pg_stat_statements_reset()' -W ${PGPASSWORD}  >> 11.14_reset.txt
+done > ${db_port}/11.14_reset.txt
+vsql --pset=pager=off -c 'select pg_stat_reset_shared($$bgwriter$$)' -W ${PGPASSWORD} >> ${db_port}/11.14_reset.txt
+echo "----->>>---->>>  重置pg_stat_statements统计信息: " >> ${db_port}/$run_log_file
+vsql --pset=pager=off -q -A -c 'select pg_stat_statements_reset()' -W ${PGPASSWORD}  >> ${db_port}/11.14_reset.txt
 
 
-echo "###########################################################################"  >> $run_log_file
-echo "#                       check replication status                          #"  >> $run_log_file
-echo "###########################################################################"  >> $run_log_file
+echo "###########################################################################"  >> ${db_port}/$run_log_file
+echo "#                       check replication status                          #"  >> ${db_port}/$run_log_file
+echo "###########################################################################"  >> ${db_port}/$run_log_file
 is_standby=`vsql --pset=pager=off -q -A -t -c 'select pg_is_in_recovery();' -W ${PGPASSWORD}`
 
 ### primary process ###
 if [ "$is_standby" = "f" ]; then
-touch ${primary_file}
-echo ${os_home}," is primary." >> $run_log_file
-tar zcvf  primary_inspection_`date +"%Y-%m-%d"`_${HOST_NAME}.tar.gz *.txt
-scp primary_inspection_`date +"%Y-%m-%d"`_${HOST_NAME}.tar.gz root@${mange_ip}:${mange_inspection}
+touch ${db_port}/${primary_file}
+find ./db_inspection/resluts/ -name *${db_port}.tar.gz   -exec rm -rf {} \;
+tar zcvf  ./db_inspection/resluts/primary_inspection_`date +"%Y-%m-%d"`_${HOST_NAME}_${db_port}.tar.gz ${db_port}/*.txt
+#scp primary_inspection_`date +"%Y-%m-%d"`_${HOST_NAME}_${db_port}.tar.gz root@${mange_ip}:${mange_inspection}
 fi  
 
 ### secondary process ###
 if [ "$is_standby" = "t" ]; then
-touch is_secondary.txt
-echo ${os_home},"is secondary." >> $run_log_file
-tar zcvf  secondary_inspection_`date +"%Y-%m-%d"`_${HOST_NAME}.tar.gz *.txt
-scp primary_inspection_`date +"%Y-%m-%d"`_${HOST_NAME}.tar.gz root@${mange_ip}:${mange_inspection}
+touch ${db_port}/is_secondary.txt
+find ./db_inspection/resluts/ -name *${db_port}.tar.gz   -exec rm -rf {} \;
+tar zcvf  ./db_inspection/resluts/secondary_inspection_`date +"%Y-%m-%d"`_${HOST_NAME}_${db_port}.tar.gz ${db_port}/*.txt
+#scp primary_inspection_`date +"%Y-%m-%d"`_${HOST_NAME}_${db_port}.tar.gz root@${mange_ip}:${mange_inspection}
 fi
