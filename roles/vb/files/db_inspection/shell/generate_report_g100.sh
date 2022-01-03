@@ -17,8 +17,8 @@
 vb_home=$1
 vb_data=$2
 db_port=$3 
-mange_ip=$5
-mange_inspection=$6
+#mange_ip=$5
+#mange_inspection=$6
 
 
 
@@ -47,8 +47,9 @@ fi
 # 记住当前目录
 PWD=`pwd`
 
-mkdir ${db_port}
-
+if [[ ! -d ${db_port} ]];then
+  mkdir ${db_port}
+fi
 
 run_log_file="generate_vb_file_$(date "+%Y_%m_%d_%H_%M_%S").log"
 primary_file='is_primary.txt'

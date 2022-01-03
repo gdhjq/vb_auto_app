@@ -40,7 +40,7 @@ vb_dcs_conf: /usr/local/vastbase/dcs
 
 # - connection - #
 vb_listen: '0.0.0.0'                          # VastbaseG100 listen address, '0.0.0.0' (all ipv4 addr) by default
-vb_port: 5432                                 # VastbaseG100  port, 5432 by default
+#vb_port: 5432                                 # VastbaseG100  port, 5432 by default
 vb_localhost: /tmp             # localhost unix socket dir for connection
 
 # - patroni - #

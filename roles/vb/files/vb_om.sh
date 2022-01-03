@@ -104,9 +104,11 @@ function main() {
                     ;;
 			-p)
 			    [ "${a[$i]}" == "-p" ] && shift
-                    db_port=${1##*=}
-					db_port=`echo ${db_port}|  sed  -e 's/ *\[//;s/]//' `
-					db_port=(${db_port//,/ })
+                    #db_port=${1##*=}
+					db_port=`echo ${1}|  sed  -e 's/ *\[//;s/]//;s/, /,/' `
+					db_port2=`echo ${2}|  sed  -e 's/ *\[//;s/]//;s/,//'`
+					db_port=(${db_port//,/ } ${db_port2})	
+					shift
                     shift
                     ;;		
             -h)

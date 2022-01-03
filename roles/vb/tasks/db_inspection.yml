@@ -37,7 +37,7 @@
     
     - name:  execute om sh
       #chdir: "{{ vb_an_conf }}/vb_om.sh "  执行巡检脚本
-      shell :  "cd {{ vb_an_conf }}/ &&{{ vb_an_conf }}/vb_om.sh    -i  -b {{ vb_db_home }}  -D {{ vb_data }}  -p {{ vb_port }} "
+      shell :  "cd {{ vb_an_conf }}/ &&{{ vb_an_conf }}/vb_om.sh    -i  -b {{ vb_db_home }}  -D {{ vb_data }}  -p {{ vb_port }}"
       register: result
 
     - name: Show debug info
