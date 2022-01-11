@@ -4,45 +4,64 @@
 #==============================================================#
 
 
-- name: create  vastbase G100 directories
-  tags: vb_dir
+- name: create  PostgreSQL {{ pg_version }} directories
+  tags: pg_dir
   become: yes
   block:
     - name: Make sure main and backup dir exists
-      file: path={{ item }} state=directory owner={{ vb_db_su }}   group={{ vb_db_su }} mode=0777
+      file: path={{ item }} state=directory owner={{ pg_db_su }}   group={{ pg_db_su }} mode=0744
       with_items: 
-        - "{{ vb_an_conf }}"
-        - "{{ vb_dcs_conf }}"
+        - "{{ pg_an_conf }}"
+        - "{{ pg_dcs_conf }}"
     
-    # vb_an_confs: create db_inspection   db_check   db_monitor dir
-    - name: create vastbase G100 directory structure
-      file: path={{ item }}  state=directory owner={{ vb_db_su }} group={{ vb_db_su }} mode=0700
+    # pg_an_conf: create db_inspection    dir
+    - name: create psotgres  directory structure
+      file: path={{ item }}  state=directory owner={{ pg_db_su }} group={{ pg_db_su }} mode=0700
       with_items:
-        - "{{ vb_an_conf }}/db_inspection"
-        - "{{ vb_an_conf }}/db_check"
-        - "{{ vb_an_conf }}/backup"
-        - "{{ vb_an_conf }}/db_monitor"
+        - "{{ pg_an_conf }}/db_inspection"
+        - "{{ pg_an_conf }}/db_inspection/py"
+        - "{{ pg_an_conf }}/db_inspection/shell"
+        - "{{ pg_an_conf }}/db_inspection/resluts"
+        - "{{ pg_an_conf }}/db_inspection/template"
       
     - name: Copy generate report 
-      copy: src=db_inspection/shell/generate_report_g100.sh  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group={{ vb_db_su }} mode=0744
+      copy: src=db_inspection/shell/pg_all.sh  dest="{{ pg_an_conf }}/db_inspection/shell" owner={{ pg_db_su }} group={{ pg_db_su }} mode=0744
     
     - name: Copy py 
-      copy: src=db_inspection/py/generate_report_template_v1.0.1.py  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group={{ vb_db_su }} mode=0744
+      copy: src=db_inspection/py/generate_report_template_v1.0.1.py  dest="{{ pg_an_conf }}/db_inspection/py" owner={{ pg_db_su }} group={{ pg_db_su }} mode=0744
     - name:  Copy template
-      copy: src=db_inspection/template/Template1.docx  dest="{{ vb_an_conf }}/db_inspection" owner={{ vb_db_su }} group={{ vb_db_su }} mode=0744
+      copy: src=db_inspection/template/Template1.docx  dest="{{ pg_an_conf }}/db_inspection/template" owner={{ pg_db_su }} group={{ pg_db_su }} mode=0744
+    
+    - name: copy om
+      copy: src=pg_om.sh dest="{{ pg_an_conf }}" owner={{ pg_db_su }} group={{ pg_db_su }} mode=0744
     
     - name:  execute sh
-      #chdir: "{{ vb_an_conf }}/db_inspection" 执行巡检脚本
-      shell :  "cd {{ vb_an_conf }}/db_inspection/ &&{{ vb_an_conf }}/db_inspection/generate_report_g100.sh    {{ os_home }}  {{ vb_db_home }}  {{ vb_data }} {{ vb_port }} {{ mange_ip }} {{ mange_inspection }} "
+      #chdir: "{{ pg_an_conf }}/db_inspection" 执行巡检脚本
+      shell :  "cd {{ pg_an_conf }}/ &&{{ pg_an_conf }}/pg_om.sh   -i  -b {{ pg_db_home }} -D {{ pg_data }} -p {{ pg_port }} >log.log 2>&1  "
       register: result
 
     - name: Show debug info
       debug: var=result.stdout_lines verbosity=0
- 
-    - name:  execute py
-      #执行python脚本生成模板文档
-      shell :  "cd {{ vb_an_conf }}/db_inspection/ &&dos2unix {{ vb_an_conf }}/db_inspection/generate_report_template_v1.0.1.py &&{{ vb_an_conf }}/db_inspection/generate_report_template_v1.0.1.py "
-      register: result
     
-    - name: Show debug info
-      debug: var=result.stdout_lines verbosity=0
+      # 批量传输巡检文件
+    - name: find file
+      find: 
+        paths: "{{ pg_an_conf }}/db_inspection/resluts/"
+        patterns: "*tar.gz"
+        recurse: no
+      register: file_name
+
+    - name: copy_file
+      fetch:
+        src: "{{ item.path }}"
+        dest: "{{ mange_inspection }}/"
+        flat: yes
+      with_items: "{{ file_name.files }}"
+   
+      # - name:  execute py
+      #执行python脚本生成模板文档
+    #  shell :  "cd {{ pg_an_conf }}/db_inspection/ &&dos2unix {{ pg_an_conf }}/db_inspection/generate_report_template_v1.0.1.py &&{{ vb_an_conf }}/db_inspection/generate_report_template_v1.0.1.py "
+    #  register: result
+    
+    #- name: Show debug info
+   #   debug: var=result.stdout_lines verbosity=0

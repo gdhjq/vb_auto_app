@@ -8,6 +8,7 @@
 # Path      :   mian.yml
 #==============================================================#
 
+# Vastbase G100
 #---------------------------------------------------------------
 - name:  vastbase     
   become: yes
@@ -16,3 +17,13 @@
   tags: vastbase
   roles:
     - role: vb      
+
+#postgresql
+#---------------------------------------------------------------
+- name:  postgres     
+  become: yes
+  hosts: all
+  gather_facts: no
+  tags: postgres
+  roles:
+    - role: pg     

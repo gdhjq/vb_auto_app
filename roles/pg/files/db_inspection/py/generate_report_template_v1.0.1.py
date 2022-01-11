@@ -20,7 +20,9 @@ from docxtpl import DocxTemplate
 check_result_file_dict = dict()
 data_docx =  dict()
 ### init configuration ###
-cur_dir = os.getcwd()
+cur_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+resluts_dir = os.path.join(cur_dir,'resluts')
+tar_dir = os.path.join(resluts_dir,'primary_VM-16-10-centos_2022-01-06_15432\\VM-16-10-centos_15432\\')
 
 ### node role flag file ###
 primary_flag_file = 'is_primary.txt'
@@ -51,6 +53,7 @@ def init_check_result_file_dict(path):
                 check_result_file_dict[file_pre_num]= fname
 
 
+
 def get_content_from_file(file_name):
     """
     function: get content from check result file
@@ -61,7 +64,7 @@ def get_content_from_file(file_name):
         content = file_obj.read()
         return content
 
-def check_item_detail():
+def check_item_detail(path):
     """
     function: check_item_detail
     input :  NA
@@ -72,7 +75,7 @@ def check_item_detail():
         idx_keys = re.sub(u"([^\u0041-\u005a\u0061-\u007a])","" ,idx_detail)
       #  if idx_keys == 'ipaddresstxt':
          #   continue
-        idx_result = get_content_from_file(str(idx_detail))
+        idx_result = get_content_from_file(path + str(idx_detail))
         data_docx[idx_keys] = idx_result
 
 def read_content_from_file(fname):
@@ -81,7 +84,7 @@ def read_content_from_file(fname):
     input :  file_name
     output:  read hostname  content
     """
-    with open(fname) as file_obj:
+    with open(fname,encoding='utf-8') as file_obj:
         return file_obj.read().strip('\n')
 
 
@@ -89,20 +92,20 @@ def read_content_from_file(fname):
 if __name__ == "__main__":
 
     ### get check database hostname ###
-    default_check_hostname_result_file = '1.1_hostname.txt'
+    default_check_hostname_result_file =  tar_dir +'1.1_hostname.txt'
     check_hostname = read_content_from_file(default_check_hostname_result_file)
 
     ### generate doc file content ####
-    init_check_result_file_dict(cur_dir)
-    #print(check_result_file_dict)
-    check_item_detail()
+    init_check_result_file_dict(tar_dir)
+    print(check_result_file_dict)
+    check_item_detail(tar_dir)
     
-    primary_role = os.path.exists(os.path.join(cur_dir,primary_flag_file))
+    primary_role = os.path.exists(os.path.join(tar_dir,primary_flag_file))
     check_hostname = 'primary_' + check_hostname if primary_role else  'secondary_' + check_hostname
     
 
     ## save docx
-    doc = DocxTemplate('Template1.docx')
+    doc = DocxTemplate('../template/Template1.docx')
     doc.render(data_docx)
     doc_file_name = check_hostname + '.docx'
     doc.save(doc_file_name)

@@ -102,7 +102,7 @@ if __name__ == "__main__":
     
 
     ## save docx
-    doc = DocxTemplate('Template1.docx')
+    doc = DocxTemplate('../template/Template1.docx')
     doc.render(data_docx)
     doc_file_name = check_hostname + '.docx'
     doc.save(doc_file_name)
